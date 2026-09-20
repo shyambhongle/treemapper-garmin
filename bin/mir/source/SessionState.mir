@@ -1,0 +1,709 @@
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Lang,1,14,18]; ]
+import Toybox.Lang;
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Math,2,14,18]; ]
+import Toybox.Math;
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [System,3,14,20]; ]
+import Toybox.System;
+//! Mock session state.
+//!
+//! THIS FILE IS THE FAKE. Nothing here touches Position or Communications.
+//! It exists so the whole interface can be driven and reviewed in the
+//! simulator. When the real work lands, replace the body of tick() and
+//! send() with the GNSS reads and phone messaging from DESIGN.md and leave
+//! the views untouched.
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 13; @position = 4; @symbol_vardef = [gSession,13,4,12]; @symbol_type<0> = [SessionState,13,16,28]; ]
+var gSession as SessionState or Null = null;
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 16; ]
+enum {
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 17; @position = 4; @symbol_enumdec = [LINK_CONNECTED,17,4,18]; ]
+    LINK_CONNECTED = 0,
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 18; @position = 4; @symbol_enumdec = [LINK_BUFFERING,18,4,18]; ]
+    LINK_BUFFERING = 1,
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 19; @position = 4; @symbol_enumdec = [LINK_OFFLINE,19,4,16]; ]
+    LINK_OFFLINE = 2
+}
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 23; ]
+enum {
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 24; @position = 4; @symbol_enumdec = [SEND_SENT,24,4,13]; ]
+    SEND_SENT = 0,
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 25; @position = 4; @symbol_enumdec = [SEND_QUEUED,25,4,15]; ]
+    SEND_QUEUED = 1,
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 26; @position = 4; @symbol_enumdec = [SEND_REJECTED,26,4,17]; ]
+    SEND_REJECTED = 2
+}
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 29; @symbol_classdef = [SessionState,29,6,18]; ]
+class SessionState {
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 29; ]
+    <init> {
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 33 15 ]
+        symbol [ LINK_CONNECTED %tmp.2 33 32 46 ];
+        %tmp.2 = getv ? :LINK_CONNECTED;
+        putv self :link %tmp.2;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 42 15 ]
+        %tmp.3 = newa 5 Array<Number>;
+        symbol [ Array %tmp.3 42 63 68 ];
+        symbol [ Number %tmp.3 42 69 75 ];
+        %tmp.4 = 0;
+        %tmp.5 = dup %tmp.3;
+        %tmp.6 = aputv %tmp.5 0 %tmp.4;
+        %tmp.7 = 0;
+        %tmp.8 = dup %tmp.6;
+        %tmp.9 = aputv %tmp.8 1 %tmp.7;
+        %tmp.10 = 0;
+        %tmp.11 = dup %tmp.9;
+        %tmp.12 = aputv %tmp.11 2 %tmp.10;
+        %tmp.13 = 0;
+        %tmp.14 = dup %tmp.12;
+        %tmp.15 = aputv %tmp.14 3 %tmp.13;
+        %tmp.16 = 0;
+        %tmp.17 = dup %tmp.15;
+        %tmp.18 = aputv %tmp.17 4 %tmp.16;
+        putv self :histogram %tmp.18;
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 29; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 30; @position = 15; @symbol_vardef = [quality,30,15,22]; @symbol_type<0> = [Number,30,26,32]; ]
+    public
+    var quality as Number = 0;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 31; @position = 15; @symbol_vardef = [sent,31,15,19]; @symbol_type<0> = [Number,31,23,29]; ]
+    public
+    var sent as Number = 0;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 32; @position = 15; @symbol_vardef = [queued,32,15,21]; @symbol_type<0> = [Number,32,25,31]; ]
+    public
+    var queued as Number = 0;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 33; @position = 15; @symbol_vardef = [link,33,15,19]; @symbol_type<0> = [Number,33,23,29]; ]
+    public
+    var link as Number;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 35; @position = 15; @symbol_vardef = [minQuality,35,15,25]; @symbol_type<0> = [Number,35,29,35]; ]
+    public
+    var minQuality as Number = 3;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 37; @position = 16; @symbol_vardef = [_startedMs,37,16,26]; @symbol_type<0> = [Number,37,30,36]; ]
+    private
+    var _startedMs as Number = 0;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 38; @position = 16; @symbol_vardef = [_lastWanderMs,38,16,29]; @symbol_type<0> = [Number,38,33,39]; ]
+    private
+    var _lastWanderMs as Number = 0;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 39; @position = 16; @symbol_vardef = [_lastLinkMs,39,16,27]; @symbol_type<0> = [Number,39,31,37]; ]
+    private
+    var _lastLinkMs as Number = 0;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 42; @position = 15; @symbol_vardef = [histogram,42,15,24]; @symbol_type<0> = [Array,42,28,33]; @symbol_type<1> = [Number,42,34,40]; ]
+    public
+    var histogram as Array<Number>;
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 44; @symbol_functiondef = [initialize,44,13,23]; ]
+    function initialize() as Void {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_44_26_46_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 45 8 ]
+        symbol [ System %tmp.1 45 21 27 ];
+        %tmp.1 = getm $.Toybox.System;
+        symbol [ getTimer %tmp.2 45 28 36 ];
+        %tmp.2 = getv function %tmp.1 :getTimer;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        symbol [ _startedMs ? 45 8 18 ];
+        putv self :_startedMs %tmp.3;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_44_26_46_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 48; @symbol_functiondef = [startSession,48,13,25]; ]
+    function startSession() as Void {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_48_36_57_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 49 8 ]
+        %tmp.1 = 0;
+        symbol [ quality ? 49 8 15 ];
+        putv self :quality %tmp.1;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 50 8 ]
+        %tmp.2 = 0;
+        symbol [ sent ? 50 8 12 ];
+        putv self :sent %tmp.2;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 51 8 ]
+        %tmp.3 = 0;
+        symbol [ queued ? 51 8 14 ];
+        putv self :queued %tmp.3;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 52 8 ]
+        symbol [ LINK_CONNECTED %tmp.5 52 15 29 ];
+        %tmp.5 = getv ? :LINK_CONNECTED;
+        symbol [ link ? 52 8 12 ];
+        putv self :link %tmp.5;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 53 8 ]
+        %tmp.6 = newa 5 Array<Number>;
+        symbol [ Array %tmp.6 53 39 44 ];
+        symbol [ Number %tmp.6 53 45 51 ];
+        %tmp.7 = 0;
+        %tmp.8 = dup %tmp.6;
+        %tmp.9 = aputv %tmp.8 0 %tmp.7;
+        %tmp.10 = 0;
+        %tmp.11 = dup %tmp.9;
+        %tmp.12 = aputv %tmp.11 1 %tmp.10;
+        %tmp.13 = 0;
+        %tmp.14 = dup %tmp.12;
+        %tmp.15 = aputv %tmp.14 2 %tmp.13;
+        %tmp.16 = 0;
+        %tmp.17 = dup %tmp.15;
+        %tmp.18 = aputv %tmp.17 3 %tmp.16;
+        %tmp.19 = 0;
+        %tmp.20 = dup %tmp.18;
+        %tmp.21 = aputv %tmp.20 4 %tmp.19;
+        symbol [ histogram ? 53 8 17 ];
+        putv self :histogram %tmp.21;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 54 8 ]
+        symbol [ System %tmp.22 54 21 27 ];
+        %tmp.22 = getm $.Toybox.System;
+        symbol [ getTimer %tmp.23 54 28 36 ];
+        %tmp.23 = getv function %tmp.22 :getTimer;
+        %tmp.24 = invoke %tmp.22 %tmp.23();
+        symbol [ _startedMs ? 54 8 18 ];
+        putv self :_startedMs %tmp.24;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 55 8 ]
+        symbol [ _startedMs %tmp.26 55 24 34 ];
+        %tmp.26 = getv ? :_startedMs;
+        symbol [ _lastWanderMs ? 55 8 21 ];
+        putv self :_lastWanderMs %tmp.26;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 56 8 ]
+        symbol [ _startedMs %tmp.28 56 22 32 ];
+        %tmp.28 = getv ? :_startedMs;
+        symbol [ _lastLinkMs ? 56 8 19 ];
+        putv self :_lastLinkMs %tmp.28;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_48_36_57_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 59; @symbol_functiondef = [elapsedMs,59,13,22]; @symbol_return<0> = [Number,59,28,34]; ]
+    function elapsedMs() as Number {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_59_35_61_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 60 8 ]
+        symbol [ System %tmp.1 60 15 21 ];
+        %tmp.1 = getm $.Toybox.System;
+        symbol [ getTimer %tmp.2 60 22 30 ];
+        %tmp.2 = getv function %tmp.1 :getTimer;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        symbol [ _startedMs %tmp.5 60 35 45 ];
+        %tmp.5 = getv ? :_startedMs;
+        %tmp.6 = sub %tmp.3 %tmp.5;
+        ret %tmp.6;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_59_35_61_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 63; @symbol_functiondef = [elapsedSeconds,63,13,27]; @symbol_return<0> = [Number,63,33,39]; ]
+    function elapsedSeconds() as Number {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_63_40_65_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 64 8 ]
+        %tmp.1 = self;
+        symbol [ elapsedMs %tmp.2 64 15 24 ];
+        %tmp.2 = getv function %tmp.1 :elapsedMs;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        %tmp.4 = 1000;
+        %tmp.5 = div %tmp.3 %tmp.4;
+        ret %tmp.5;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_63_40_65_4_stop:
+    }
+    //! mm:ss for the summary screen.
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 68; @symbol_functiondef = [elapsedString,68,13,26]; @symbol_return<0> = [String,68,32,38]; ]
+    function elapsedString() as String {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 69 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_stop" ]
+        %total.1 = local;
+        symbol [ total %total.1 69 12 17 ];
+        %tmp.1 = self;
+        symbol [ elapsedSeconds %tmp.2 69 20 34 ];
+        %tmp.2 = getv function %tmp.1 :elapsedSeconds;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %total.1 %tmp.3;
+        symbol [ total %total.1 69 12 17 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 70 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_stop" ]
+        %mins.2 = local;
+        symbol [ mins %mins.2 70 12 16 ];
+        %tmp.4 = lgetv %total.1;
+        symbol [ total %tmp.4 70 19 24 ];
+        %tmp.5 = 60;
+        %tmp.6 = div %tmp.4 %tmp.5;
+        lputv %mins.2 %tmp.6;
+        symbol [ mins %mins.2 70 12 16 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 71 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_stop" ]
+        %secs.3 = local;
+        symbol [ secs %secs.3 71 12 16 ];
+        %tmp.7 = lgetv %total.1;
+        symbol [ total %tmp.7 71 19 24 ];
+        %tmp.8 = 60;
+        %tmp.9 = mod %tmp.7 %tmp.8;
+        lputv %secs.3 %tmp.9;
+        symbol [ secs %secs.3 71 12 16 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 72 8 ]
+        %tmp.10 = lgetv %mins.2;
+        symbol [ mins %tmp.10 72 15 19 ];
+        symbol [ format %tmp.11 72 20 26 ];
+        %tmp.11 = getv function %tmp.10 :format;
+        %tmp.12 = "%d";
+        %tmp.13 = invoke %tmp.10 %tmp.11(%tmp.12);
+        %tmp.14 = ":";
+        %tmp.15 = add %tmp.13 %tmp.14;
+        %tmp.16 = lgetv %secs.3;
+        symbol [ secs %tmp.16 72 41 45 ];
+        symbol [ format %tmp.17 72 46 52 ];
+        %tmp.17 = getv function %tmp.16 :format;
+        %tmp.18 = "%02d";
+        %tmp.19 = invoke %tmp.16 %tmp.17(%tmp.18);
+        %tmp.20 = add %tmp.15 %tmp.19;
+        ret %tmp.20;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_68_39_73_4_stop:
+    }
+    //! Every point recorded this session, sent or still waiting.
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 76; @symbol_functiondef = [totalPoints,76,13,24]; @symbol_return<0> = [Number,76,30,36]; ]
+    function totalPoints() as Number {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_76_37_78_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 77 8 ]
+        symbol [ sent %tmp.2 77 15 19 ];
+        %tmp.2 = getv ? :sent;
+        symbol [ queued %tmp.4 77 22 28 ];
+        %tmp.4 = getv ? :queued;
+        %tmp.5 = add %tmp.2 %tmp.4;
+        ret %tmp.5;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_76_37_78_4_stop:
+    }
+    //! Advance the simulation. Called from each view's render timer.
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 81; @symbol_functiondef = [tick,81,13,17]; ]
+    function tick() as Void {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_81_28_113_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 82 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_81_28_113_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_81_28_113_4_stop" ]
+        %now.1 = local;
+        symbol [ now %now.1 82 12 15 ];
+        symbol [ System %tmp.1 82 18 24 ];
+        %tmp.1 = getm $.Toybox.System;
+        symbol [ getTimer %tmp.2 82 25 33 ];
+        %tmp.2 = getv function %tmp.1 :getTimer;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %now.1 %tmp.3;
+        symbol [ now %now.1 82 12 15 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 83 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_81_28_113_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_81_28_113_4_stop" ]
+        %age.2 = local;
+        symbol [ age %age.2 83 12 15 ];
+        %tmp.4 = lgetv %now.1;
+        symbol [ now %tmp.4 83 18 21 ];
+        symbol [ _startedMs %tmp.6 83 24 34 ];
+        %tmp.6 = getv ? :_startedMs;
+        %tmp.7 = sub %tmp.4 %tmp.6;
+        lputv %age.2 %tmp.7;
+        symbol [ age %age.2 83 12 15 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 86 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_8_99_8_if_stmt:
+        %tmp.8 = lgetv %age.2;
+        symbol [ age %tmp.8 86 12 15 ];
+        %tmp.9 = 2200;
+        %tmp.10 = lt %tmp.8 %tmp.9;
+        bf %tmp.10 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_8_99_8_if_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_8_99_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_24_88_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 87 12 ]
+        %tmp.11 = 0;
+        symbol [ quality ? 87 12 19 ];
+        putv self :quality %tmp.11;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_24_88_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_8_99_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_8_99_8_if_false:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 88 15 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_15_99_8_if_stmt:
+        %tmp.12 = lgetv %age.2;
+        symbol [ age %tmp.12 88 19 22 ];
+        %tmp.13 = 4000;
+        %tmp.14 = lt %tmp.12 %tmp.13;
+        bf %tmp.14 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_15_99_8_if_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_15_99_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_31_90_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 89 12 ]
+        %tmp.15 = 2;
+        symbol [ quality ? 89 12 19 ];
+        putv self :quality %tmp.15;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_31_90_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_15_99_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_15_99_8_if_false:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 90 15 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_15_99_8_if_stmt:
+        %tmp.16 = lgetv %age.2;
+        symbol [ age %tmp.16 90 19 22 ];
+        %tmp.17 = 6200;
+        %tmp.18 = lt %tmp.16 %tmp.17;
+        bf %tmp.18 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_15_99_8_if_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_15_99_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_31_92_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 91 12 ]
+        %tmp.19 = 3;
+        symbol [ quality ? 91 12 19 ];
+        putv self :quality %tmp.19;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_31_92_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_15_99_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_15_99_8_if_false:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 92 15 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_15_99_8_if_stmt:
+        %tmp.20 = lgetv %now.1;
+        symbol [ now %tmp.20 92 20 23 ];
+        symbol [ _lastWanderMs %tmp.22 92 26 39 ];
+        %tmp.22 = getv ? :_lastWanderMs;
+        %tmp.23 = sub %tmp.20 %tmp.22;
+        %tmp.24 = 6000;
+        %tmp.25 = gt %tmp.23 %tmp.24;
+        bf %tmp.25 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_15_99_8_if_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_15_99_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_49_97_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 94 12 ]
+        %tmp.26 = lgetv %now.1;
+        symbol [ now %tmp.26 94 28 31 ];
+        symbol [ _lastWanderMs ? 94 12 25 ];
+        putv self :_lastWanderMs %tmp.26;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 95 12 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_49_97_8_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_49_97_8_stop" ]
+        %roll.3 = local;
+        symbol [ roll %roll.3 95 16 20 ];
+        symbol [ Math %tmp.27 95 23 27 ];
+        %tmp.27 = getm $.Toybox.Math;
+        symbol [ rand %tmp.28 95 28 32 ];
+        %tmp.28 = getv function %tmp.27 :rand;
+        %tmp.29 = invoke %tmp.27 %tmp.28();
+        %tmp.30 = 10;
+        %tmp.31 = mod %tmp.29 %tmp.30;
+        lputv %roll.3 %tmp.31;
+        symbol [ roll %roll.3 95 16 20 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 96 12 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_begin:
+        %tmp.32 = lgetv %roll.3;
+        symbol [ roll %tmp.32 96 23 27 ];
+        %tmp.33 = 6;
+        %tmp.34 = lt %tmp.32 %tmp.33;
+        bf %tmp.34 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_else_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_true:
+        %tmp.35 = 4;
+        push %tmp.35;
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_else_false:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_begin:
+        %tmp.36 = lgetv %roll.3;
+        symbol [ roll %tmp.36 96 41 45 ];
+        %tmp.37 = 9;
+        %tmp.38 = lt %tmp.36 %tmp.37;
+        bf %tmp.38 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_else_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_true:
+        %tmp.39 = 3;
+        push %tmp.39;
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_else_false:
+        %tmp.40 = 2;
+        push %tmp.40;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_end:
+        %tmp.41 = phi [%tmp.38 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_begin] [%tmp.39 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_true] [%tmp.40 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_else_false] [%tmp.41 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_40_96_57_end];
+        push %tmp.41;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_end:
+        %tmp.42 = phi [%tmp.34 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_begin] [%tmp.35 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_true] [%tmp.41 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_else_false] [%tmp.42 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_96_22_96_58_end];
+        symbol [ quality ? 96 12 19 ];
+        putv self :quality %tmp.42;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_49_97_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_15_99_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_15_99_8_if_false:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 97 15 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_97_15_99_8_if_stmt:
+        symbol [ quality %tmp.44 97 19 26 ];
+        %tmp.44 = getv ? :quality;
+        %tmp.45 = 2;
+        %tmp.46 = lt %tmp.44 %tmp.45;
+        bf %tmp.46 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_97_15_99_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_97_15_99_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_97_32_99_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 98 12 ]
+        %tmp.47 = 4;
+        symbol [ quality ? 98 12 19 ];
+        putv self :quality %tmp.47;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_97_32_99_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_97_15_99_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_97_15_99_8_if_end:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_92_15_99_8_if_end:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_90_15_99_8_if_end:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_88_15_99_8_if_end:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_86_8_99_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 103 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_103_8_112_8_if_stmt:
+        %tmp.48 = lgetv %now.1;
+        symbol [ now %tmp.48 103 13 16 ];
+        symbol [ _lastLinkMs %tmp.50 103 19 30 ];
+        %tmp.50 = getv ? :_lastLinkMs;
+        %tmp.51 = sub %tmp.48 %tmp.50;
+        %tmp.52 = 20000;
+        %tmp.53 = gt %tmp.51 %tmp.52;
+        bf %tmp.53 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_103_8_112_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_103_8_112_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_103_41_112_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 104 12 ]
+        %tmp.54 = lgetv %now.1;
+        symbol [ now %tmp.54 104 26 29 ];
+        symbol [ _lastLinkMs ? 104 12 23 ];
+        putv self :_lastLinkMs %tmp.54;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 105 12 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_12_111_12_if_stmt:
+        symbol [ link %tmp.56 105 16 20 ];
+        %tmp.56 = getv ? :link;
+        symbol [ LINK_CONNECTED %tmp.58 105 24 38 ];
+        %tmp.58 = getv ? :LINK_CONNECTED;
+        %tmp.59 = eq %tmp.56 %tmp.58;
+        bf %tmp.59 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_12_111_12_if_else_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_12_111_12_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_40_107_12_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 106 16 ]
+        symbol [ LINK_BUFFERING %tmp.61 106 23 37 ];
+        %tmp.61 = getv ? :LINK_BUFFERING;
+        symbol [ link ? 106 16 20 ];
+        putv self :link %tmp.61;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_40_107_12_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_12_111_12_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_12_111_12_if_else_false:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_107_19_111_12_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 108 16 ]
+        symbol [ LINK_CONNECTED %tmp.63 108 23 37 ];
+        %tmp.63 = getv ? :LINK_CONNECTED;
+        symbol [ link ? 108 16 20 ];
+        putv self :link %tmp.63;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 109 16 ]
+        symbol [ sent %tmp.64 109 16 20 ];
+        %tmp.64 = getv self :sent;
+        symbol [ queued %tmp.66 109 24 30 ];
+        %tmp.66 = getv ? :queued;
+        %tmp.67 = add %tmp.64 %tmp.66;
+        symbol [ sent ? 109 16 20 ];
+        putv self :sent dup %tmp.67;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 110 16 ]
+        %tmp.68 = 0;
+        symbol [ queued ? 110 16 22 ];
+        putv self :queued %tmp.68;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_107_19_111_12_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_105_12_111_12_if_end:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_103_41_112_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_103_8_112_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_103_8_112_8_if_end:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_81_28_113_4_stop:
+    }
+    //! Try to record and send a point.
+    //! Returns SEND_SENT, SEND_QUEUED or SEND_REJECTED.
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 117; @symbol_functiondef = [send,117,13,17]; @symbol_return<0> = [Number,117,23,29]; ]
+    function send() as Number {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_117_30_133_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 118 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_118_8_120_8_if_stmt:
+        symbol [ quality %tmp.2 118 12 19 ];
+        %tmp.2 = getv ? :quality;
+        symbol [ minQuality %tmp.4 118 22 32 ];
+        %tmp.4 = getv ? :minQuality;
+        %tmp.5 = lt %tmp.2 %tmp.4;
+        bf %tmp.5 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_118_8_120_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_118_8_120_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_118_34_120_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 119 12 ]
+        symbol [ SEND_REJECTED %tmp.7 119 19 32 ];
+        %tmp.7 = getv ? :SEND_REJECTED;
+        ret %tmp.7;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_118_34_120_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_118_8_120_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_118_8_120_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 122 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_8_124_8_if_stmt:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_12_122_40_begin:
+        symbol [ quality %tmp.9 122 12 19 ];
+        %tmp.9 = getv ? :quality;
+        %tmp.10 = 0;
+        %tmp.11 = gte %tmp.9 %tmp.10;
+        bf %tmp.11 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_8_124_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_29_122_40_true:
+        symbol [ quality %tmp.13 122 29 36 ];
+        %tmp.13 = getv ? :quality;
+        %tmp.14 = 4;
+        %tmp.15 = lte %tmp.13 %tmp.14;
+        push %tmp.15;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_29_122_40_end:
+        %tmp.16 = phi [%tmp.11 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_12_122_40_begin] [%tmp.15 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_29_122_40_true] [%tmp.16 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_29_122_40_end];
+        bf %tmp.16 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_8_124_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_8_124_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_43_124_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 123 12 ]
+        symbol [ histogram %tmp.17 123 12 21 ];
+        %tmp.17 = getv self :histogram;
+        symbol [ histogram %tmp.19 123 33 42 ];
+        %tmp.19 = getv ? :histogram;
+        symbol [ quality %tmp.21 123 43 50 ];
+        %tmp.21 = getv ? :quality;
+        %tmp.22 = agetv %tmp.19 %tmp.21;
+        %tmp.23 = 1;
+        %tmp.24 = add %tmp.22 %tmp.23;
+        symbol [ quality %tmp.26 123 22 29 ];
+        %tmp.26 = getv ? :quality;
+        aputv %tmp.17 %tmp.26 %tmp.24;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_43_124_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_8_124_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_122_8_124_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 126 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_126_8_129_8_if_stmt:
+        symbol [ link %tmp.28 126 12 16 ];
+        %tmp.28 = getv ? :link;
+        symbol [ LINK_CONNECTED %tmp.30 126 20 34 ];
+        %tmp.30 = getv ? :LINK_CONNECTED;
+        %tmp.31 = eq %tmp.28 %tmp.30;
+        bf %tmp.31 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_126_8_129_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_126_8_129_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_126_36_129_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 127 12 ]
+        symbol [ sent %tmp.34 127 12 16 ];
+        %tmp.34 = getv ? :sent;
+        %tmp.35 = add %tmp.34 1;
+        symbol [ sent ? 127 12 16 ];
+        putv self :sent dup %tmp.35;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 128 12 ]
+        symbol [ SEND_SENT %tmp.37 128 19 28 ];
+        %tmp.37 = getv ? :SEND_SENT;
+        ret %tmp.37;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_126_36_129_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_126_8_129_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_126_8_129_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 131 8 ]
+        symbol [ queued %tmp.40 131 8 14 ];
+        %tmp.40 = getv ? :queued;
+        %tmp.41 = add %tmp.40 1;
+        symbol [ queued ? 131 8 14 ];
+        putv self :queued dup %tmp.41;
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 132 8 ]
+        symbol [ SEND_QUEUED %tmp.43 132 15 26 ];
+        %tmp.43 = getv ? :SEND_QUEUED;
+        ret %tmp.43;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_117_30_133_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 135; @symbol_functiondef = [isLinked,135,13,21]; @symbol_return<0> = [Boolean,135,27,34]; ]
+    function isLinked() as Boolean {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_135_35_137_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 136 8 ]
+        symbol [ link %tmp.2 136 15 19 ];
+        %tmp.2 = getv ? :link;
+        symbol [ LINK_CONNECTED %tmp.4 136 23 37 ];
+        %tmp.4 = getv ? :LINK_CONNECTED;
+        %tmp.5 = eq %tmp.2 %tmp.4;
+        ret %tmp.5;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_135_35_137_4_stop:
+    }
+    //! Only ever shown when something is wrong. See README, "silence is good
+    //! news": a permanent "connected" badge tells the user nothing on the
+    //! ninety nine screens where it is true.
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 142; @symbol_functiondef = [linkWarning,142,13,24]; @symbol_return<0> = [String,142,30,36]; ]
+    function linkWarning() as String {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_142_37_150_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 143 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_143_8_145_8_if_stmt:
+        symbol [ link %tmp.2 143 12 16 ];
+        %tmp.2 = getv ? :link;
+        symbol [ LINK_BUFFERING %tmp.4 143 20 34 ];
+        %tmp.4 = getv ? :LINK_BUFFERING;
+        %tmp.5 = eq %tmp.2 %tmp.4;
+        bf %tmp.5 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_143_8_145_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_143_8_145_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_143_36_145_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 144 12 ]
+        %tmp.6 = "Phone lost, holding ";
+        symbol [ queued %tmp.8 144 44 50 ];
+        %tmp.8 = getv ? :queued;
+        symbol [ format %tmp.9 144 51 57 ];
+        %tmp.9 = getv function %tmp.8 :format;
+        %tmp.10 = "%d";
+        %tmp.11 = invoke %tmp.8 %tmp.9(%tmp.10);
+        %tmp.12 = add %tmp.6 %tmp.11;
+        ret %tmp.12;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_143_36_145_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_143_8_145_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_143_8_145_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 146 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_146_8_148_8_if_stmt:
+        symbol [ link %tmp.14 146 12 16 ];
+        %tmp.14 = getv ? :link;
+        symbol [ LINK_OFFLINE %tmp.16 146 20 32 ];
+        %tmp.16 = getv ? :LINK_OFFLINE;
+        %tmp.17 = eq %tmp.14 %tmp.16;
+        bf %tmp.17 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_146_8_148_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_146_8_148_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_146_34_148_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 147 12 ]
+        %tmp.18 = "Watch only";
+        ret %tmp.18;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_146_34_148_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_146_8_148_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_146_8_148_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 149 8 ]
+        %tmp.19 = "";
+        ret %tmp.19;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_142_37_150_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 152; @symbol_functiondef = [linkColour,152,13,23]; @symbol_return<0> = [Number,152,29,35]; ]
+    function linkColour() as Number {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_152_36_156_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 153 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_153_8_153_62_if_stmt:
+        symbol [ link %tmp.2 153 12 16 ];
+        %tmp.2 = getv ? :link;
+        symbol [ LINK_BUFFERING %tmp.4 153 20 34 ];
+        %tmp.4 = getv ? :LINK_BUFFERING;
+        %tmp.5 = eq %tmp.2 %tmp.4;
+        bf %tmp.5 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_153_8_153_62_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_153_8_153_62_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_153_36_153_62_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 153 38 ]
+        symbol [ Theme %tmp.7 153 45 50 ];
+        %tmp.7 = getv ? :Theme;
+        symbol [ BUFFERING %tmp.8 153 51 60 ];
+        %tmp.8 = getv %tmp.7 :BUFFERING;
+        ret %tmp.8;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_153_36_153_62_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_153_8_153_62_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_153_8_153_62_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 154 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_154_8_154_58_if_stmt:
+        symbol [ link %tmp.10 154 12 16 ];
+        %tmp.10 = getv ? :link;
+        symbol [ LINK_OFFLINE %tmp.12 154 20 32 ];
+        %tmp.12 = getv ? :LINK_OFFLINE;
+        %tmp.13 = eq %tmp.10 %tmp.12;
+        bf %tmp.13 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_154_8_154_58_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_154_8_154_58_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_154_34_154_58_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 154 36 ]
+        symbol [ Theme %tmp.15 154 43 48 ];
+        %tmp.15 = getv ? :Theme;
+        symbol [ OFFLINE %tmp.16 154 49 56 ];
+        %tmp.16 = getv %tmp.15 :OFFLINE;
+        ret %tmp.16;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_154_34_154_58_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_154_8_154_58_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_154_8_154_58_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 155 8 ]
+        symbol [ Theme %tmp.18 155 15 20 ];
+        %tmp.18 = getv ? :Theme;
+        symbol [ LINKED %tmp.19 155 21 27 ];
+        %tmp.19 = getv %tmp.18 :LINKED;
+        ret %tmp.19;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_152_36_156_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 158; @symbol_functiondef = [minQualityLabel,158,13,28]; @symbol_return<0> = [String,158,34,40]; ]
+    function minQualityLabel() as String {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_158_41_160_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc" 159 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_begin:
+        symbol [ minQuality %tmp.2 159 15 25 ];
+        %tmp.2 = getv ? :minQuality;
+        %tmp.3 = 4;
+        %tmp.4 = gte %tmp.2 %tmp.3;
+        bf %tmp.4 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_else_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_true:
+        %tmp.5 = "Good only";
+        push %tmp.5;
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_else_false:
+        %tmp.6 = "Usable";
+        push %tmp.6;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_end:
+        %tmp.7 = phi [%tmp.4 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_begin] [%tmp.5 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_true] [%tmp.6 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_else_false] [%tmp.7 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_159_15_159_47_end];
+        ret %tmp.7;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_SessionState_mc_158_41_160_4_stop:
+    }
+}
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/SessionState.mc"; @line = 1; ]
+<init> {
+}

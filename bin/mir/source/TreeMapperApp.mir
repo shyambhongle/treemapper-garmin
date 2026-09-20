@@ -1,0 +1,77 @@
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Application,1,14,25]; ]
+import Toybox.Application;
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
+import Toybox.Lang;
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [WatchUi,3,14,21]; ]
+import Toybox.WatchUi;
+//! TreeMapper GPS for Garmin.
+//!
+//! UI prototype. Nothing here touches the GNSS receiver or the phone: the
+//! session data is simulated in SessionState so every screen and transition can
+//! be reviewed in the simulator. See DESIGN.md for the intended architecture.
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 10; @symbol_classdef = [TreeMapperApp,10,6,19]; @symbol_extends<0> = [Application,10,28,39]; @symbol_extends<1> = [AppBase,10,40,47]; ]
+class TreeMapperApp extends Application.AppBase {
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 10; ]
+    <init> {
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 10; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 12; @symbol_functiondef = [initialize,12,13,23]; ]
+    function initialize() as Void {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_12_26_14_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc" 13 8 ]
+        symbol [ AppBase %tmp.2 13 8 15 ];
+        %tmp.2 = getv ? :AppBase;
+        symbol [ initialize %tmp.3 13 16 26 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_12_26_14_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 16; @symbol_functiondef = [onStart,16,13,20]; @symbol_param<0> = [state,16,21,26]; @symbol_param<0>_type<0> = [Dictionary,16,30,40]; ]
+    function onStart(state as Dictionary or Null) as Void {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_16_51_18_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc" 17 8 ]
+        symbol [ $ %tmp.1 17 8 9 ];
+        %tmp.1 = getm $;
+        symbol [ SessionState %tmp.5 17 25 37 ];
+        %tmp.5 = getv ? :SessionState;
+        %tmp.2 = newc %tmp.5 ();
+        symbol [ gSession ? 17 10 18 ];
+        putv %tmp.1 :gSession %tmp.2;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_16_51_18_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 20; @symbol_functiondef = [onStop,20,13,19]; @symbol_param<0> = [state,20,20,25]; @symbol_param<0>_type<0> = [Dictionary,20,29,39]; ]
+    function onStop(state as Dictionary or Null) as Void {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_20_50_22_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc" 21 8 ]
+        symbol [ $ %tmp.1 21 8 9 ];
+        %tmp.1 = getm $;
+        %tmp.2 = null;
+        symbol [ gSession ? 21 10 18 ];
+        putv %tmp.1 :gSession %tmp.2;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_20_50_22_4_stop:
+    }
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 24; @symbol_functiondef = [getInitialView,24,13,27]; @symbol_return<0> = [WatchUi,24,34,41]; @symbol_return<1> = [Views,24,42,47]; @symbol_return<2> = [WatchUi,24,53,60]; @symbol_return<3> = [Views,24,61,66]; @symbol_return<4> = [WatchUi,24,68,75]; @symbol_return<5> = [InputDelegates,24,76,90]; ]
+    function getInitialView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_24_92_26_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc" 25 8 ]
+        %tmp.1 = newa 2;
+        symbol [ HomeView %tmp.5 25 20 28 ];
+        %tmp.5 = getv ? :HomeView;
+        %tmp.2 = newc %tmp.5 ();
+        %tmp.6 = dup %tmp.1;
+        %tmp.7 = aputv %tmp.6 0 %tmp.2;
+        symbol [ HomeDelegate %tmp.11 25 36 48 ];
+        %tmp.11 = getv ? :HomeDelegate;
+        %tmp.8 = newc %tmp.11 ();
+        %tmp.12 = dup %tmp.7;
+        %tmp.13 = aputv %tmp.12 1 %tmp.8;
+        ret %tmp.13;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_TreeMapperApp_mc_24_92_26_4_stop:
+    }
+}
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc"; @line = 1; ]
+<init> {
+}

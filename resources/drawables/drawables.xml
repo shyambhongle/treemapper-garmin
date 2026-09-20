@@ -1,0 +1,25 @@
+<resources>
+    <!--
+      Store and launcher artwork, as supplied.
+
+      The compiler warns that this is larger than the device's launcher slot
+      (60x60 on epix2, other sizes elsewhere) and scales it down. That is
+      expected and harmless: a clean downscale from 128 beats shipping one
+      small icon that has to be scaled up on other products. To silence it
+      once the device list is final, add a per device resources-<product>
+      folder with the exact size that product asks for.
+    -->
+    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+
+    <!--
+      The mark, white on transparent, for drawing on the app's black screens.
+
+      Three fixed sizes rather than one scaled resource: the resource
+      compiler's scaleX attribute takes a pixel format, not a fraction of the
+      screen, so Layout.markResource() picks the right one at runtime from the
+      screen width. Each is roughly 30 percent of its target screen.
+    -->
+    <bitmap id="MarkSmall"  filename="mark_w64.png" />
+    <bitmap id="MarkMedium" filename="mark_w96.png" />
+    <bitmap id="MarkLarge"  filename="mark_w130.png" />
+</resources>

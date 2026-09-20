@@ -1,0 +1,8 @@
+project.manifest = manifest.xml
+
+base.sourcePath = source;source/ui;source/views
+base.resourcePath = resources
+
+# Type checking: gradual. Raise to 2 (informative) once the real
+# background/glance code exists and needs scope validation.
+project.typecheck = 1
