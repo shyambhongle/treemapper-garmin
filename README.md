@@ -3,14 +3,21 @@
 A Connect IQ watch app that acts as a high accuracy GPS source for the
 TreeMapper phone app.
 
-**This build is the interface only.** Nothing talks to the GNSS receiver or to
-the phone yet. All session data comes from `source/SessionState.mc`, which
-simulates a fix ramping up, wandering between quality levels, and a phone link
-that occasionally drops. That is deliberate: it lets the whole interface be
-driven and reviewed in the simulator before any platform work starts.
+This is the real thing: `Toybox.Position` drives the fix, `Toybox.Communications`
+carries it to the phone, and `Application.Storage` holds anything the phone has
+not acknowledged.
 
-The intended architecture is in [`DESIGN.md`](DESIGN.md). Platform notes are in
-[`docs-research/`](docs-research/).
+- [`PROTOCOL.md`](PROTOCOL.md) is the contract to implement the phone side against.
+- [`TESTING.md`](TESTING.md) is the procedure for testing on a real watch.
+- [`DESIGN.md`](DESIGN.md) is the architecture and the reasoning.
+- [`docs-research/`](docs-research/) is the Connect IQ platform reference.
+
+**The constraint that shapes everything:** `Position.enableLocationEvents()` is
+limited to device apps and widgets, so a background service cannot turn the
+receiver on. The watch app must be running in the foreground to produce a fresh
+fix. A cold multi-band fix takes tens of seconds, so the app starts the receiver
+on launch and keeps it warm for the session. Open it at the plot, leave it
+running, and every request answers in milliseconds.
 
 ---
 
@@ -18,10 +25,10 @@ The intended architecture is in [`DESIGN.md`](DESIGN.md). Platform notes are in
 
 | | Screen | Purpose |
 |---|---|---|
-| 1 | **Home** | The mark, the name, one instruction. START to begin. |
-| 2 | **Acquiring** | Sweeping arc while the receiver converges. Auto advances once the fix clears the quality floor. |
+| 1 | **Home** | A short splash. The receiver already started in `onStart`, so this holds for 1.5 s then advances on its own. START skips it. |
+| 2 | **Acquiring** | Sweeping arc while the receiver converges, with an elapsed counter so slow is distinguishable from broken. Advances on a real fix, or after 90 seconds with any position. |
 | 3 | **Capture** | The working screen. Quality ring, one large count, START to send. |
-| 4 | **Sending** | The point is in flight to the phone. Short, but real: Bluetooth is fast, not instant. |
+| 4 | **Sending** | The point is genuinely in flight, and the screen says whether the phone or the watch button asked for it. |
 | 5 | **Sent** | It reached TreeMapper. Offers the next tree or finish, and continues on its own after four seconds. |
 | 6 | **Held on watch** | The same screen when the phone was not listening. The point is recorded, not delivered, and it says so. |
 | 7 | **Waiting** | Capture screen with the fix below the floor: ring breathes, action hint goes dead, warning strip appears. |
@@ -142,8 +149,9 @@ previews/               static screen renders
 4. Run with **Ctrl+F5** (Windows/Linux) or **Cmd+F5** (macOS) with a `.mc` file
    focused.
 
-In the simulator the session starts with no fix, reaches usable at about four
-seconds and good at about six, then wanders. Press START or tap to send a point.
+In the simulator, use *Simulation > Position* to feed coordinates and
+*Simulation > Bluetooth* to fake the phone link. To exercise the real protocol,
+drive it from the Android SDK's ADB transport; see `PROTOCOL.md`.
 
 ### Expected build warning
 
@@ -159,15 +167,35 @@ device with the exact size that product wants and the warning goes away.
 
 ---
 
-## What is missing, on purpose
+## How the pieces fit
 
-- `Toybox.Position`: no GNSS configuration, no fixes, no quality filtering
-- `Toybox.Communications`: no phone messaging
-- `Application.Storage`: no offline buffer
-- No permissions declared in the manifest
+```
+TreeMapperApp        starts and stops the session with the app
+  SessionState       the brain: owns the three below, the only thing views touch
+    GpsService       Toybox.Position. Picks the best supported GNSS config,
+                     keeps the receiver warm, hands out snapshots
+    PhoneLink        Toybox.Communications. One parcel in flight at a time,
+                     explicit acknowledgement, link state
+    PointQueue       Application.Storage. Durable outbox, about 500 points
+```
 
-When those land, `SessionState.mc` is the only file that should need replacing.
-The views read from it and nothing else.
+Two rules run through it:
+
+**A point is not sent until the phone says so.** Everything captured goes into
+the outbox first and the counters derive from what was acknowledged. A dropped
+link costs a delay, never a tree.
+
+**The watch never filters on quality.** Every point travels with its
+`Position.Quality` value and the phone decides what to keep. The watch refuses
+only when there is no position at all, or the outbox is full.
+
+## Not built yet
+
+- No `Background` permission and no background service. Everything happens while
+  the app is open, which is forced by the Position restriction above.
+- No activity recording or FIT output.
+- Reconnect is best effort: the outbox flushes on the next tick when the link
+  returns, with no backoff.
 
 ---
 

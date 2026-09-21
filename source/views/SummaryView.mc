@@ -24,7 +24,7 @@ class SummaryView extends WatchUi.View {
     function onShow() as Void {
         _reveal.start();
         _timer = new Timer.Timer();
-        _timer.start(method(:onFrame), 45, true);
+        _timer.start(method(:onFrame), 50, true);
     }
 
     function onHide() as Void {
@@ -72,9 +72,18 @@ class SummaryView extends WatchUi.View {
 
         drawQualitySplit(dc, L, session, p);
 
-        UiKit.caption(dc, L.cx, (L.h * 0.74).toNumber(),
-                      session.elapsedString() + "  elapsed",
-                      L.fontLabel, Theme.blend(Theme.BG, Theme.TEXT_DIM, p));
+        // If anything is still on the watch, say so here. Closing the app
+        // believing everything reached the phone is how a morning gets lost.
+        var waiting = session.outboxSize();
+        if (waiting > 0) {
+            UiKit.statusPill(dc, L.cx, (L.h * 0.745).toNumber(),
+                             waiting.format("%d") + " not sent yet",
+                             Theme.BUFFERING, L.fontLabel);
+        } else {
+            UiKit.caption(dc, L.cx, (L.h * 0.745).toNumber(),
+                          session.elapsedString() + "  elapsed",
+                          L.fontLabel, Theme.blend(Theme.BG, Theme.TEXT_DIM, p));
+        }
 
         UiKit.caption(dc, L.cx, L.bottomHintY,
                       L.isTouch ? "Tap to close" : "START to close",

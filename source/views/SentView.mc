@@ -45,7 +45,7 @@ class SentView extends WatchUi.View {
         _shownAtMs = System.getTimer();
         _reveal.start();
         _timer = new Timer.Timer();
-        _timer.start(method(:onFrame), 40, true);
+        _timer.start(method(:onFrame), 50, true);
     }
 
     function onHide() as Void {

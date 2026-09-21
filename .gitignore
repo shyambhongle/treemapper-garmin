@@ -1,0 +1,51 @@
+# ---------------------------------------------------------------------------
+# Connect IQ build output
+# ---------------------------------------------------------------------------
+bin/
+gen/
+*.prg
+*.prg.debug.xml
+*.iq
+*.barrel
+
+# ---------------------------------------------------------------------------
+# Signing material. Never commit this.
+#
+# The developer key is an RSA 4096 private key. Lose it and you can never ship
+# an update to the published store app; leak it and someone else can ship one
+# as you. It belongs in the organisation password manager, not in a repo.
+# ---------------------------------------------------------------------------
+developer_key
+*.der
+*.pem
+*.key
+
+# ---------------------------------------------------------------------------
+# Android demo harness, excluded on request.
+#
+# NOTE: this means the demo is NOT version controlled. It exists only on
+# whichever machine has a copy, and a fresh clone will not have it. If it
+# should outlive this laptop, delete this line and let it be tracked, or move
+# it to its own repository.
+# ---------------------------------------------------------------------------
+android-demo/
+
+# ---------------------------------------------------------------------------
+# Scratch output from the Claude desktop session, not project source
+# ---------------------------------------------------------------------------
+Claude outputs/
+
+# ---------------------------------------------------------------------------
+# Editors and operating systems
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------------------
+# Python tooling (tools/preview.py, tools/make_icons.py)
+# ---------------------------------------------------------------------------
+__pycache__/
+*.pyc

@@ -11,7 +11,7 @@ module SessionMenu {
         var menu = new WatchUi.Menu2({ :title => "Session" });
 
         menu.addItem(new WatchUi.MenuItem(
-            "Quality floor",
+            "Warn below",
             session != null ? session.minQualityLabel() : "Usable",
             :quality,
             {}));
@@ -34,8 +34,10 @@ class SessionMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         if (id == :quality) {
             if (session != null) {
-                // Two sensible floors only. A slider of five values would be
-                // false precision: the receiver reports steps, not metres.
+                // This only colours the interface. The watch sends every
+                // point with its quality attached; the phone decides what to
+                // keep. Two settings, because the receiver reports steps and a
+                // five value slider would be false precision.
                 session.minQuality = (session.minQuality >= 4) ? 3 : 4;
                 item.setSubLabel(session.minQualityLabel());
             }

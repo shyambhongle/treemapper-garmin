@@ -89,7 +89,7 @@ _Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_24_
         %tmp.14 = const :onFrame;
         symbol [ onFrame %tmp.14 27 29 36 const ];
         %tmp.15 = invoke %tmp.11 %tmp.12(%tmp.14);
-        %tmp.16 = 45;
+        %tmp.16 = 50;
         %tmp.17 = true;
         invoke %tmp.9 %tmp.10(%tmp.15, %tmp.16, %tmp.17);
 _Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_24_30_28_4_stop:
@@ -169,9 +169,9 @@ _Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_37_
     }
     [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 46; @symbol_functiondef = [onUpdate,46,13,21]; @symbol_param<0> = [dc,46,22,24]; @symbol_param<0>_type<0> = [Graphics,46,28,36]; @symbol_param<0>_type<1> = [Dc,46,37,39]; ]
     function onUpdate(dc as Graphics.Dc) as Void {
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_start:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_start:
 [ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 47 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_stop" ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_stop" ]
         %L.1 = local;
         symbol [ L %L.1 47 12 13 ];
         symbol [ _layout %tmp.2 47 16 23 ];
@@ -179,7 +179,7 @@ _Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_
         lputv %L.1 %tmp.2;
         symbol [ L %L.1 47 12 13 ];
 [ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 48 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_stop" ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_stop" ]
         %session.2 = local;
         symbol [ session %session.2 48 12 19 ];
         symbol [ $ %tmp.3 48 22 23 ];
@@ -242,7 +242,7 @@ _Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_49_
         %tmp.26 = true;
         invoke %tmp.23 %tmp.24(%tmp.25, %tmp.26);
 [ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 55 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_stop" ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_stop" ]
         %p.3 = local;
         symbol [ p %p.3 55 12 13 ];
         symbol [ Anim %tmp.28 55 16 20 ];
@@ -488,462 +488,525 @@ _Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_70_
         %tmp.164 = lgetv %p.3;
         symbol [ p %tmp.164 73 41 42 ];
         invoke %tmp.159 %tmp.160(%tmp.161, %tmp.162, %tmp.163, %tmp.164);
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 75 8 ]
-        symbol [ UiKit %tmp.166 75 8 13 ];
-        %tmp.166 = getv ? :UiKit;
-        symbol [ caption %tmp.167 75 14 21 ];
-        %tmp.167 = getv function %tmp.166 :caption;
-        %tmp.168 = lgetv %dc;
-        symbol [ dc %tmp.168 75 22 24 ];
-        %tmp.169 = lgetv %L.1;
-        symbol [ L %tmp.169 75 26 27 ];
-        symbol [ cx %tmp.170 75 28 30 ];
-        %tmp.170 = getv %tmp.169 :cx;
-        %tmp.171 = lgetv %L.1;
-        symbol [ L %tmp.171 75 33 34 ];
-        symbol [ h %tmp.172 75 35 36 ];
-        %tmp.172 = getv %tmp.171 :h;
-        %tmp.173 = 0.74;
-        %tmp.174 = mul %tmp.172 %tmp.173;
-        symbol [ toNumber %tmp.175 75 45 53 ];
-        %tmp.175 = getv function %tmp.174 :toNumber;
-        %tmp.176 = invoke %tmp.174 %tmp.175();
-        %tmp.177 = lgetv %session.2;
-        symbol [ session %tmp.177 76 22 29 ];
-        symbol [ elapsedString %tmp.178 76 30 43 ];
-        %tmp.178 = getv function %tmp.177 :elapsedString;
-        %tmp.179 = invoke %tmp.177 %tmp.178();
-        %tmp.180 = "  elapsed";
-        %tmp.181 = add %tmp.179 %tmp.180;
-        %tmp.182 = lgetv %L.1;
-        symbol [ L %tmp.182 77 22 23 ];
-        symbol [ fontLabel %tmp.183 77 24 33 ];
-        %tmp.183 = getv %tmp.182 :fontLabel;
-        symbol [ Theme %tmp.185 77 35 40 ];
-        %tmp.185 = getv ? :Theme;
-        symbol [ blend %tmp.186 77 41 46 ];
-        %tmp.186 = getv function %tmp.185 :blend;
-        symbol [ Theme %tmp.188 77 47 52 ];
-        %tmp.188 = getv ? :Theme;
-        symbol [ BG %tmp.189 77 53 55 ];
-        %tmp.189 = getv %tmp.188 :BG;
-        symbol [ Theme %tmp.191 77 57 62 ];
-        %tmp.191 = getv ? :Theme;
-        symbol [ TEXT_DIM %tmp.192 77 63 71 ];
-        %tmp.192 = getv %tmp.191 :TEXT_DIM;
-        %tmp.193 = lgetv %p.3;
-        symbol [ p %tmp.193 77 73 74 ];
-        %tmp.194 = invoke %tmp.185 %tmp.186(%tmp.189, %tmp.192, %tmp.193);
-        invoke %tmp.166 %tmp.167(%tmp.168, %tmp.170, %tmp.176, %tmp.181, %tmp.183, %tmp.194);
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 79 8 ]
-        symbol [ UiKit %tmp.196 79 8 13 ];
-        %tmp.196 = getv ? :UiKit;
-        symbol [ caption %tmp.197 79 14 21 ];
-        %tmp.197 = getv function %tmp.196 :caption;
-        %tmp.198 = lgetv %dc;
-        symbol [ dc %tmp.198 79 22 24 ];
-        %tmp.199 = lgetv %L.1;
-        symbol [ L %tmp.199 79 26 27 ];
-        symbol [ cx %tmp.200 79 28 30 ];
-        %tmp.200 = getv %tmp.199 :cx;
-        %tmp.201 = lgetv %L.1;
-        symbol [ L %tmp.201 79 32 33 ];
-        symbol [ bottomHintY %tmp.202 79 34 45 ];
-        %tmp.202 = getv %tmp.201 :bottomHintY;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_begin:
-        %tmp.203 = lgetv %L.1;
-        symbol [ L %tmp.203 80 22 23 ];
-        symbol [ isTouch %tmp.204 80 24 31 ];
-        %tmp.204 = getv %tmp.203 :isTouch;
-        bf %tmp.204 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_else_false;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_true:
-        %tmp.205 = "Tap to close";
-        push %tmp.205;
-        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_end;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_else_false:
-        %tmp.206 = "START to close";
-        push %tmp.206;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_end:
-        %tmp.207 = phi [%tmp.204 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_begin] [%tmp.205 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_true] [%tmp.206 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_else_false] [%tmp.207 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_80_22_80_51_end];
-        %tmp.208 = lgetv %L.1;
-        symbol [ L %tmp.208 81 22 23 ];
-        symbol [ fontBody %tmp.209 81 24 32 ];
-        %tmp.209 = getv %tmp.208 :fontBody;
-        symbol [ Theme %tmp.211 81 34 39 ];
-        %tmp.211 = getv ? :Theme;
-        symbol [ fade %tmp.212 81 40 44 ];
-        %tmp.212 = getv function %tmp.211 :fade;
-        symbol [ Theme %tmp.214 81 45 50 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 77 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_stop" ]
+        %waiting.4 = local;
+        symbol [ waiting %waiting.4 77 12 19 ];
+        %tmp.165 = lgetv %session.2;
+        symbol [ session %tmp.165 77 22 29 ];
+        symbol [ outboxSize %tmp.166 77 30 40 ];
+        %tmp.166 = getv function %tmp.165 :outboxSize;
+        %tmp.167 = invoke %tmp.165 %tmp.166();
+        lputv %waiting.4 %tmp.167;
+        symbol [ waiting %waiting.4 77 12 19 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 78 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_8_86_8_if_stmt:
+        %tmp.168 = lgetv %waiting.4;
+        symbol [ waiting %tmp.168 78 12 19 ];
+        %tmp.169 = 0;
+        %tmp.170 = gt %tmp.168 %tmp.169;
+        bf %tmp.170 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_8_86_8_if_else_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_8_86_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_25_82_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 79 12 ]
+        symbol [ UiKit %tmp.172 79 12 17 ];
+        %tmp.172 = getv ? :UiKit;
+        symbol [ statusPill %tmp.173 79 18 28 ];
+        %tmp.173 = getv function %tmp.172 :statusPill;
+        %tmp.174 = lgetv %dc;
+        symbol [ dc %tmp.174 79 29 31 ];
+        %tmp.175 = lgetv %L.1;
+        symbol [ L %tmp.175 79 33 34 ];
+        symbol [ cx %tmp.176 79 35 37 ];
+        %tmp.176 = getv %tmp.175 :cx;
+        %tmp.177 = lgetv %L.1;
+        symbol [ L %tmp.177 79 40 41 ];
+        symbol [ h %tmp.178 79 42 43 ];
+        %tmp.178 = getv %tmp.177 :h;
+        %tmp.179 = 0.745;
+        %tmp.180 = mul %tmp.178 %tmp.179;
+        symbol [ toNumber %tmp.181 79 53 61 ];
+        %tmp.181 = getv function %tmp.180 :toNumber;
+        %tmp.182 = invoke %tmp.180 %tmp.181();
+        %tmp.183 = lgetv %waiting.4;
+        symbol [ waiting %tmp.183 80 29 36 ];
+        symbol [ format %tmp.184 80 37 43 ];
+        %tmp.184 = getv function %tmp.183 :format;
+        %tmp.185 = "%d";
+        %tmp.186 = invoke %tmp.183 %tmp.184(%tmp.185);
+        %tmp.187 = " not sent yet";
+        %tmp.188 = add %tmp.186 %tmp.187;
+        symbol [ Theme %tmp.190 81 29 34 ];
+        %tmp.190 = getv ? :Theme;
+        symbol [ BUFFERING %tmp.191 81 35 44 ];
+        %tmp.191 = getv %tmp.190 :BUFFERING;
+        %tmp.192 = lgetv %L.1;
+        symbol [ L %tmp.192 81 46 47 ];
+        symbol [ fontLabel %tmp.193 81 48 57 ];
+        %tmp.193 = getv %tmp.192 :fontLabel;
+        invoke %tmp.172 %tmp.173(%tmp.174, %tmp.176, %tmp.182, %tmp.188, %tmp.191, %tmp.193);
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_25_82_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_8_86_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_8_86_8_if_else_false:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_82_15_86_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 83 12 ]
+        symbol [ UiKit %tmp.195 83 12 17 ];
+        %tmp.195 = getv ? :UiKit;
+        symbol [ caption %tmp.196 83 18 25 ];
+        %tmp.196 = getv function %tmp.195 :caption;
+        %tmp.197 = lgetv %dc;
+        symbol [ dc %tmp.197 83 26 28 ];
+        %tmp.198 = lgetv %L.1;
+        symbol [ L %tmp.198 83 30 31 ];
+        symbol [ cx %tmp.199 83 32 34 ];
+        %tmp.199 = getv %tmp.198 :cx;
+        %tmp.200 = lgetv %L.1;
+        symbol [ L %tmp.200 83 37 38 ];
+        symbol [ h %tmp.201 83 39 40 ];
+        %tmp.201 = getv %tmp.200 :h;
+        %tmp.202 = 0.745;
+        %tmp.203 = mul %tmp.201 %tmp.202;
+        symbol [ toNumber %tmp.204 83 50 58 ];
+        %tmp.204 = getv function %tmp.203 :toNumber;
+        %tmp.205 = invoke %tmp.203 %tmp.204();
+        %tmp.206 = lgetv %session.2;
+        symbol [ session %tmp.206 84 26 33 ];
+        symbol [ elapsedString %tmp.207 84 34 47 ];
+        %tmp.207 = getv function %tmp.206 :elapsedString;
+        %tmp.208 = invoke %tmp.206 %tmp.207();
+        %tmp.209 = "  elapsed";
+        %tmp.210 = add %tmp.208 %tmp.209;
+        %tmp.211 = lgetv %L.1;
+        symbol [ L %tmp.211 85 26 27 ];
+        symbol [ fontLabel %tmp.212 85 28 37 ];
+        %tmp.212 = getv %tmp.211 :fontLabel;
+        symbol [ Theme %tmp.214 85 39 44 ];
         %tmp.214 = getv ? :Theme;
-        symbol [ GREEN_LIGHT %tmp.215 81 51 62 ];
-        %tmp.215 = getv %tmp.214 :GREEN_LIGHT;
-        %tmp.216 = lgetv %p.3;
-        symbol [ p %tmp.216 81 64 65 ];
-        %tmp.217 = invoke %tmp.211 %tmp.212(%tmp.215, %tmp.216);
-        invoke %tmp.196 %tmp.197(%tmp.198, %tmp.200, %tmp.202, %tmp.207, %tmp.209, %tmp.217);
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_82_4_stop:
+        symbol [ blend %tmp.215 85 45 50 ];
+        %tmp.215 = getv function %tmp.214 :blend;
+        symbol [ Theme %tmp.217 85 51 56 ];
+        %tmp.217 = getv ? :Theme;
+        symbol [ BG %tmp.218 85 57 59 ];
+        %tmp.218 = getv %tmp.217 :BG;
+        symbol [ Theme %tmp.220 85 61 66 ];
+        %tmp.220 = getv ? :Theme;
+        symbol [ TEXT_DIM %tmp.221 85 67 75 ];
+        %tmp.221 = getv %tmp.220 :TEXT_DIM;
+        %tmp.222 = lgetv %p.3;
+        symbol [ p %tmp.222 85 77 78 ];
+        %tmp.223 = invoke %tmp.214 %tmp.215(%tmp.218, %tmp.221, %tmp.222);
+        invoke %tmp.195 %tmp.196(%tmp.197, %tmp.199, %tmp.205, %tmp.210, %tmp.212, %tmp.223);
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_82_15_86_8_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_78_8_86_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 88 8 ]
+        symbol [ UiKit %tmp.225 88 8 13 ];
+        %tmp.225 = getv ? :UiKit;
+        symbol [ caption %tmp.226 88 14 21 ];
+        %tmp.226 = getv function %tmp.225 :caption;
+        %tmp.227 = lgetv %dc;
+        symbol [ dc %tmp.227 88 22 24 ];
+        %tmp.228 = lgetv %L.1;
+        symbol [ L %tmp.228 88 26 27 ];
+        symbol [ cx %tmp.229 88 28 30 ];
+        %tmp.229 = getv %tmp.228 :cx;
+        %tmp.230 = lgetv %L.1;
+        symbol [ L %tmp.230 88 32 33 ];
+        symbol [ bottomHintY %tmp.231 88 34 45 ];
+        %tmp.231 = getv %tmp.230 :bottomHintY;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_begin:
+        %tmp.232 = lgetv %L.1;
+        symbol [ L %tmp.232 89 22 23 ];
+        symbol [ isTouch %tmp.233 89 24 31 ];
+        %tmp.233 = getv %tmp.232 :isTouch;
+        bf %tmp.233 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_else_false;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_true:
+        %tmp.234 = "Tap to close";
+        push %tmp.234;
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_else_false:
+        %tmp.235 = "START to close";
+        push %tmp.235;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_end:
+        %tmp.236 = phi [%tmp.233 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_begin] [%tmp.234 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_true] [%tmp.235 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_else_false] [%tmp.236 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_89_22_89_51_end];
+        %tmp.237 = lgetv %L.1;
+        symbol [ L %tmp.237 90 22 23 ];
+        symbol [ fontBody %tmp.238 90 24 32 ];
+        %tmp.238 = getv %tmp.237 :fontBody;
+        symbol [ Theme %tmp.240 90 34 39 ];
+        %tmp.240 = getv ? :Theme;
+        symbol [ fade %tmp.241 90 40 44 ];
+        %tmp.241 = getv function %tmp.240 :fade;
+        symbol [ Theme %tmp.243 90 45 50 ];
+        %tmp.243 = getv ? :Theme;
+        symbol [ GREEN_LIGHT %tmp.244 90 51 62 ];
+        %tmp.244 = getv %tmp.243 :GREEN_LIGHT;
+        %tmp.245 = lgetv %p.3;
+        symbol [ p %tmp.245 90 64 65 ];
+        %tmp.246 = invoke %tmp.240 %tmp.241(%tmp.244, %tmp.245);
+        invoke %tmp.225 %tmp.226(%tmp.227, %tmp.229, %tmp.231, %tmp.236, %tmp.238, %tmp.246);
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_46_49_91_4_stop:
     }
     //! A slim stacked bar: how much of the session was a good fix versus a
     //! merely usable one. Honest, and takes one glance.
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 86; @symbol_functiondef = [drawQualitySplit,86,21,37]; @symbol_param<0> = [dc,86,38,40]; @symbol_param<0>_type<0> = [Graphics,86,44,52]; @symbol_param<0>_type<1> = [Dc,86,53,55]; @symbol_param<1> = [L,86,57,58]; @symbol_param<1>_type<0> = [Layout,86,62,68]; @symbol_param<2> = [session,87,38,45]; @symbol_param<2>_type<0> = [SessionState,87,49,61]; @symbol_param<3> = [p,87,63,64]; @symbol_param<3>_type<0> = [Float,87,68,73]; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 95; @symbol_functiondef = [drawQualitySplit,95,21,37]; @symbol_param<0> = [dc,95,38,40]; @symbol_param<0>_type<0> = [Graphics,95,44,52]; @symbol_param<0>_type<1> = [Dc,95,53,55]; @symbol_param<1> = [L,95,57,58]; @symbol_param<1>_type<0> = [Layout,95,62,68]; @symbol_param<2> = [session,96,38,45]; @symbol_param<2>_type<0> = [SessionState,96,49,61]; @symbol_param<3> = [p,96,63,64]; @symbol_param<3>_type<0> = [Float,96,68,73]; ]
     private
     function drawQualitySplit(dc as Graphics.Dc, L as Layout, session as SessionState, p as Float) as Void {
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 88 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 97 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %good.1 = local;
-        symbol [ good %good.1 88 12 16 ];
+        symbol [ good %good.1 97 12 16 ];
         %tmp.1 = lgetv %session;
-        symbol [ session %tmp.1 88 19 26 ];
-        symbol [ histogram %tmp.2 88 27 36 ];
+        symbol [ session %tmp.1 97 19 26 ];
+        symbol [ histogram %tmp.2 97 27 36 ];
         %tmp.2 = getv %tmp.1 :histogram;
         %tmp.3 = 4;
         %tmp.4 = agetv %tmp.2 %tmp.3;
         lputv %good.1 %tmp.4;
-        symbol [ good %good.1 88 12 16 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 89 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+        symbol [ good %good.1 97 12 16 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 98 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %usable.2 = local;
-        symbol [ usable %usable.2 89 12 18 ];
+        symbol [ usable %usable.2 98 12 18 ];
         %tmp.5 = lgetv %session;
-        symbol [ session %tmp.5 89 21 28 ];
-        symbol [ histogram %tmp.6 89 29 38 ];
+        symbol [ session %tmp.5 98 21 28 ];
+        symbol [ histogram %tmp.6 98 29 38 ];
         %tmp.6 = getv %tmp.5 :histogram;
         %tmp.7 = 3;
         %tmp.8 = agetv %tmp.6 %tmp.7;
         lputv %usable.2 %tmp.8;
-        symbol [ usable %usable.2 89 12 18 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 90 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+        symbol [ usable %usable.2 98 12 18 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 99 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %total.3 = local;
-        symbol [ total %total.3 90 12 17 ];
+        symbol [ total %total.3 99 12 17 ];
         %tmp.9 = lgetv %good.1;
-        symbol [ good %tmp.9 90 20 24 ];
+        symbol [ good %tmp.9 99 20 24 ];
         %tmp.10 = lgetv %usable.2;
-        symbol [ usable %tmp.10 90 27 33 ];
+        symbol [ usable %tmp.10 99 27 33 ];
         %tmp.11 = add %tmp.9 %tmp.10;
         lputv %total.3 %tmp.11;
-        symbol [ total %total.3 90 12 17 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 91 8 ]
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_91_8_91_34_if_stmt:
+        symbol [ total %total.3 99 12 17 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 100 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_100_8_100_34_if_stmt:
         %tmp.12 = lgetv %total.3;
-        symbol [ total %tmp.12 91 12 17 ];
+        symbol [ total %tmp.12 100 12 17 ];
         %tmp.13 = 0;
         %tmp.14 = lte %tmp.12 %tmp.13;
-        bf %tmp.14 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_91_8_91_34_if_end;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_91_8_91_34_if_true:
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_91_24_91_34_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 91 26 ]
+        bf %tmp.14 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_100_8_100_34_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_100_8_100_34_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_100_24_100_34_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 100 26 ]
         ret ?;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_91_24_91_34_stop:
-        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_91_8_91_34_if_end;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_91_8_91_34_if_end:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 93 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_100_24_100_34_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_100_8_100_34_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_100_8_100_34_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 102 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %barW.4 = local;
-        symbol [ barW %barW.4 93 12 16 ];
+        symbol [ barW %barW.4 102 12 16 ];
         %tmp.15 = lgetv %L;
-        symbol [ L %tmp.15 93 20 21 ];
-        symbol [ w %tmp.16 93 22 23 ];
+        symbol [ L %tmp.15 102 20 21 ];
+        symbol [ w %tmp.16 102 22 23 ];
         %tmp.16 = getv %tmp.15 :w;
         %tmp.17 = 0.42;
         %tmp.18 = mul %tmp.16 %tmp.17;
-        symbol [ toNumber %tmp.19 93 32 40 ];
+        symbol [ toNumber %tmp.19 102 32 40 ];
         %tmp.19 = getv function %tmp.18 :toNumber;
         %tmp.20 = invoke %tmp.18 %tmp.19();
         lputv %barW.4 %tmp.20;
-        symbol [ barW %barW.4 93 12 16 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 94 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+        symbol [ barW %barW.4 102 12 16 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 103 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %barH.5 = local;
-        symbol [ barH %barH.5 94 12 16 ];
+        symbol [ barH %barH.5 103 12 16 ];
         %tmp.21 = 5;
         lputv %barH.5 %tmp.21;
-        symbol [ barH %barH.5 94 12 16 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 95 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+        symbol [ barH %barH.5 103 12 16 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 104 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %x.6 = local;
-        symbol [ x %x.6 95 12 13 ];
+        symbol [ x %x.6 104 12 13 ];
         %tmp.22 = lgetv %L;
-        symbol [ L %tmp.22 95 16 17 ];
-        symbol [ cx %tmp.23 95 18 20 ];
+        symbol [ L %tmp.22 104 16 17 ];
+        symbol [ cx %tmp.23 104 18 20 ];
         %tmp.23 = getv %tmp.22 :cx;
         %tmp.24 = lgetv %barW.4;
-        symbol [ barW %tmp.24 95 24 28 ];
+        symbol [ barW %tmp.24 104 24 28 ];
         %tmp.25 = 2;
         %tmp.26 = div %tmp.24 %tmp.25;
         %tmp.27 = sub %tmp.23 %tmp.26;
         lputv %x.6 %tmp.27;
-        symbol [ x %x.6 95 12 13 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 96 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+        symbol [ x %x.6 104 12 13 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 105 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %y.7 = local;
-        symbol [ y %y.7 96 12 13 ];
+        symbol [ y %y.7 105 12 13 ];
         %tmp.28 = lgetv %L;
-        symbol [ L %tmp.28 96 17 18 ];
-        symbol [ h %tmp.29 96 19 20 ];
+        symbol [ L %tmp.28 105 17 18 ];
+        symbol [ h %tmp.29 105 19 20 ];
         %tmp.29 = getv %tmp.28 :h;
         %tmp.30 = 0.655;
         %tmp.31 = mul %tmp.29 %tmp.30;
-        symbol [ toNumber %tmp.32 96 30 38 ];
+        symbol [ toNumber %tmp.32 105 30 38 ];
         %tmp.32 = getv function %tmp.31 :toNumber;
         %tmp.33 = invoke %tmp.31 %tmp.32();
         lputv %y.7 %tmp.33;
-        symbol [ y %y.7 96 12 13 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 98 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+        symbol [ y %y.7 105 12 13 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 107 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %goodW.8 = local;
-        symbol [ goodW %goodW.8 98 12 17 ];
+        symbol [ goodW %goodW.8 107 12 17 ];
         %tmp.34 = lgetv %barW.4;
-        symbol [ barW %tmp.34 98 22 26 ];
+        symbol [ barW %tmp.34 107 22 26 ];
         %tmp.35 = lgetv %good.1;
-        symbol [ good %tmp.35 98 29 33 ];
+        symbol [ good %tmp.35 107 29 33 ];
         %tmp.36 = mul %tmp.34 %tmp.35;
-        symbol [ toFloat %tmp.37 98 35 42 ];
+        symbol [ toFloat %tmp.37 107 35 42 ];
         %tmp.37 = getv function %tmp.36 :toFloat;
         %tmp.38 = invoke %tmp.36 %tmp.37();
         %tmp.39 = lgetv %total.3;
-        symbol [ total %tmp.39 98 47 52 ];
-        symbol [ toFloat %tmp.40 98 53 60 ];
+        symbol [ total %tmp.39 107 47 52 ];
+        symbol [ toFloat %tmp.40 107 53 60 ];
         %tmp.40 = getv function %tmp.39 :toFloat;
         %tmp.41 = invoke %tmp.39 %tmp.40();
         %tmp.42 = div %tmp.38 %tmp.41;
         %tmp.43 = lgetv %p;
-        symbol [ p %tmp.43 98 65 66 ];
+        symbol [ p %tmp.43 107 65 66 ];
         %tmp.44 = mul %tmp.42 %tmp.43;
-        symbol [ toNumber %tmp.45 98 68 76 ];
+        symbol [ toNumber %tmp.45 107 68 76 ];
         %tmp.45 = getv function %tmp.44 :toNumber;
         %tmp.46 = invoke %tmp.44 %tmp.45();
         lputv %goodW.8 %tmp.46;
-        symbol [ goodW %goodW.8 98 12 17 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 100 8 ]
+        symbol [ goodW %goodW.8 107 12 17 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 109 8 ]
         %tmp.47 = lgetv %dc;
-        symbol [ dc %tmp.47 100 8 10 ];
-        symbol [ setColor %tmp.48 100 11 19 ];
+        symbol [ dc %tmp.47 109 8 10 ];
+        symbol [ setColor %tmp.48 109 11 19 ];
         %tmp.48 = getv function %tmp.47 :setColor;
-        symbol [ Theme %tmp.50 100 20 25 ];
+        symbol [ Theme %tmp.50 109 20 25 ];
         %tmp.50 = getv ? :Theme;
-        symbol [ blend %tmp.51 100 26 31 ];
+        symbol [ blend %tmp.51 109 26 31 ];
         %tmp.51 = getv function %tmp.50 :blend;
-        symbol [ Theme %tmp.53 100 32 37 ];
+        symbol [ Theme %tmp.53 109 32 37 ];
         %tmp.53 = getv ? :Theme;
-        symbol [ BG %tmp.54 100 38 40 ];
+        symbol [ BG %tmp.54 109 38 40 ];
         %tmp.54 = getv %tmp.53 :BG;
-        symbol [ Theme %tmp.56 100 42 47 ];
+        symbol [ Theme %tmp.56 109 42 47 ];
         %tmp.56 = getv ? :Theme;
-        symbol [ Q_USABLE %tmp.57 100 48 56 ];
+        symbol [ Q_USABLE %tmp.57 109 48 56 ];
         %tmp.57 = getv %tmp.56 :Q_USABLE;
         %tmp.58 = lgetv %p;
-        symbol [ p %tmp.58 100 58 59 ];
+        symbol [ p %tmp.58 109 58 59 ];
         %tmp.59 = invoke %tmp.50 %tmp.51(%tmp.54, %tmp.57, %tmp.58);
-        symbol [ Graphics %tmp.60 100 62 70 ];
+        symbol [ Graphics %tmp.60 109 62 70 ];
         %tmp.60 = getm $.Toybox.Graphics;
-        symbol [ COLOR_TRANSPARENT %tmp.61 100 71 88 ];
+        symbol [ COLOR_TRANSPARENT %tmp.61 109 71 88 ];
         %tmp.61 = getv %tmp.60 :COLOR_TRANSPARENT;
         invoke %tmp.47 %tmp.48(%tmp.59, %tmp.61);
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 101 8 ]
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 110 8 ]
         %tmp.62 = lgetv %dc;
-        symbol [ dc %tmp.62 101 8 10 ];
-        symbol [ fillRoundedRectangle %tmp.63 101 11 31 ];
+        symbol [ dc %tmp.62 110 8 10 ];
+        symbol [ fillRoundedRectangle %tmp.63 110 11 31 ];
         %tmp.63 = getv function %tmp.62 :fillRoundedRectangle;
         %tmp.64 = lgetv %x.6;
-        symbol [ x %tmp.64 101 32 33 ];
+        symbol [ x %tmp.64 110 32 33 ];
         %tmp.65 = lgetv %y.7;
-        symbol [ y %tmp.65 101 35 36 ];
+        symbol [ y %tmp.65 110 35 36 ];
         %tmp.66 = lgetv %barW.4;
-        symbol [ barW %tmp.66 101 38 42 ];
+        symbol [ barW %tmp.66 110 38 42 ];
         %tmp.67 = lgetv %barH.5;
-        symbol [ barH %tmp.67 101 44 48 ];
+        symbol [ barH %tmp.67 110 44 48 ];
         %tmp.68 = lgetv %barH.5;
-        symbol [ barH %tmp.68 101 50 54 ];
+        symbol [ barH %tmp.68 110 50 54 ];
         %tmp.69 = 2;
         %tmp.70 = div %tmp.68 %tmp.69;
         invoke %tmp.62 %tmp.63(%tmp.64, %tmp.65, %tmp.66, %tmp.67, %tmp.70);
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 103 8 ]
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_103_8_106_8_if_stmt:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 112 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_112_8_115_8_if_stmt:
         %tmp.71 = lgetv %goodW.8;
-        symbol [ goodW %tmp.71 103 12 17 ];
+        symbol [ goodW %tmp.71 112 12 17 ];
         %tmp.72 = 0;
         %tmp.73 = gt %tmp.71 %tmp.72;
-        bf %tmp.73 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_103_8_106_8_if_end;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_103_8_106_8_if_true:
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_103_23_106_8_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 104 12 ]
+        bf %tmp.73 @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_112_8_115_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_112_8_115_8_if_true:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_112_23_115_8_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 113 12 ]
         %tmp.74 = lgetv %dc;
-        symbol [ dc %tmp.74 104 12 14 ];
-        symbol [ setColor %tmp.75 104 15 23 ];
+        symbol [ dc %tmp.74 113 12 14 ];
+        symbol [ setColor %tmp.75 113 15 23 ];
         %tmp.75 = getv function %tmp.74 :setColor;
-        symbol [ Theme %tmp.77 104 24 29 ];
+        symbol [ Theme %tmp.77 113 24 29 ];
         %tmp.77 = getv ? :Theme;
-        symbol [ blend %tmp.78 104 30 35 ];
+        symbol [ blend %tmp.78 113 30 35 ];
         %tmp.78 = getv function %tmp.77 :blend;
-        symbol [ Theme %tmp.80 104 36 41 ];
+        symbol [ Theme %tmp.80 113 36 41 ];
         %tmp.80 = getv ? :Theme;
-        symbol [ BG %tmp.81 104 42 44 ];
+        symbol [ BG %tmp.81 113 42 44 ];
         %tmp.81 = getv %tmp.80 :BG;
-        symbol [ Theme %tmp.83 104 46 51 ];
+        symbol [ Theme %tmp.83 113 46 51 ];
         %tmp.83 = getv ? :Theme;
-        symbol [ Q_GOOD %tmp.84 104 52 58 ];
+        symbol [ Q_GOOD %tmp.84 113 52 58 ];
         %tmp.84 = getv %tmp.83 :Q_GOOD;
         %tmp.85 = lgetv %p;
-        symbol [ p %tmp.85 104 60 61 ];
+        symbol [ p %tmp.85 113 60 61 ];
         %tmp.86 = invoke %tmp.77 %tmp.78(%tmp.81, %tmp.84, %tmp.85);
-        symbol [ Graphics %tmp.87 104 64 72 ];
+        symbol [ Graphics %tmp.87 113 64 72 ];
         %tmp.87 = getm $.Toybox.Graphics;
-        symbol [ COLOR_TRANSPARENT %tmp.88 104 73 90 ];
+        symbol [ COLOR_TRANSPARENT %tmp.88 113 73 90 ];
         %tmp.88 = getv %tmp.87 :COLOR_TRANSPARENT;
         invoke %tmp.74 %tmp.75(%tmp.86, %tmp.88);
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 105 12 ]
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 114 12 ]
         %tmp.89 = lgetv %dc;
-        symbol [ dc %tmp.89 105 12 14 ];
-        symbol [ fillRoundedRectangle %tmp.90 105 15 35 ];
+        symbol [ dc %tmp.89 114 12 14 ];
+        symbol [ fillRoundedRectangle %tmp.90 114 15 35 ];
         %tmp.90 = getv function %tmp.89 :fillRoundedRectangle;
         %tmp.91 = lgetv %x.6;
-        symbol [ x %tmp.91 105 36 37 ];
+        symbol [ x %tmp.91 114 36 37 ];
         %tmp.92 = lgetv %y.7;
-        symbol [ y %tmp.92 105 39 40 ];
+        symbol [ y %tmp.92 114 39 40 ];
         %tmp.93 = lgetv %goodW.8;
-        symbol [ goodW %tmp.93 105 42 47 ];
+        symbol [ goodW %tmp.93 114 42 47 ];
         %tmp.94 = lgetv %barH.5;
-        symbol [ barH %tmp.94 105 49 53 ];
+        symbol [ barH %tmp.94 114 49 53 ];
         %tmp.95 = lgetv %barH.5;
-        symbol [ barH %tmp.95 105 55 59 ];
+        symbol [ barH %tmp.95 114 55 59 ];
         %tmp.96 = 2;
         %tmp.97 = div %tmp.95 %tmp.96;
         invoke %tmp.89 %tmp.90(%tmp.91, %tmp.92, %tmp.93, %tmp.94, %tmp.97);
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_103_23_106_8_stop:
-        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_103_8_106_8_if_end;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_103_8_106_8_if_end:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 108 8 ]
-        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop" ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_112_23_115_8_stop:
+        goto @_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_112_8_115_8_if_end;
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_112_8_115_8_if_end:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 117 8 ]
+        [ "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_start" "_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop" ]
         %pct.9 = local;
-        symbol [ pct %pct.9 108 12 15 ];
+        symbol [ pct %pct.9 117 12 15 ];
         %tmp.98 = lgetv %good.1;
-        symbol [ good %tmp.98 108 19 23 ];
+        symbol [ good %tmp.98 117 19 23 ];
         %tmp.99 = 100;
         %tmp.100 = mul %tmp.98 %tmp.99;
         %tmp.101 = lgetv %total.3;
-        symbol [ total %tmp.101 108 33 38 ];
+        symbol [ total %tmp.101 117 33 38 ];
         %tmp.102 = div %tmp.100 %tmp.101;
         lputv %pct.9 %tmp.102;
-        symbol [ pct %pct.9 108 12 15 ];
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 109 8 ]
-        symbol [ UiKit %tmp.104 109 8 13 ];
+        symbol [ pct %pct.9 117 12 15 ];
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 118 8 ]
+        symbol [ UiKit %tmp.104 118 8 13 ];
         %tmp.104 = getv ? :UiKit;
-        symbol [ caption %tmp.105 109 14 21 ];
+        symbol [ caption %tmp.105 118 14 21 ];
         %tmp.105 = getv function %tmp.104 :caption;
         %tmp.106 = lgetv %dc;
-        symbol [ dc %tmp.106 109 22 24 ];
+        symbol [ dc %tmp.106 118 22 24 ];
         %tmp.107 = lgetv %L;
-        symbol [ L %tmp.107 109 26 27 ];
-        symbol [ cx %tmp.108 109 28 30 ];
+        symbol [ L %tmp.107 118 26 27 ];
+        symbol [ cx %tmp.108 118 28 30 ];
         %tmp.108 = getv %tmp.107 :cx;
         %tmp.109 = lgetv %y.7;
-        symbol [ y %tmp.109 109 32 33 ];
+        symbol [ y %tmp.109 118 32 33 ];
         %tmp.110 = 16;
         %tmp.111 = add %tmp.109 %tmp.110;
         %tmp.112 = lgetv %pct.9;
-        symbol [ pct %tmp.112 109 40 43 ];
-        symbol [ format %tmp.113 109 44 50 ];
+        symbol [ pct %tmp.112 118 40 43 ];
+        symbol [ format %tmp.113 118 44 50 ];
         %tmp.113 = getv function %tmp.112 :format;
         %tmp.114 = "%d";
         %tmp.115 = invoke %tmp.112 %tmp.113(%tmp.114);
         %tmp.116 = "% good fix";
         %tmp.117 = add %tmp.115 %tmp.116;
         %tmp.118 = lgetv %L;
-        symbol [ L %tmp.118 110 22 23 ];
-        symbol [ fontLabel %tmp.119 110 24 33 ];
+        symbol [ L %tmp.118 119 22 23 ];
+        symbol [ fontLabel %tmp.119 119 24 33 ];
         %tmp.119 = getv %tmp.118 :fontLabel;
-        symbol [ Theme %tmp.121 110 35 40 ];
+        symbol [ Theme %tmp.121 119 35 40 ];
         %tmp.121 = getv ? :Theme;
-        symbol [ blend %tmp.122 110 41 46 ];
+        symbol [ blend %tmp.122 119 41 46 ];
         %tmp.122 = getv function %tmp.121 :blend;
-        symbol [ Theme %tmp.124 110 47 52 ];
+        symbol [ Theme %tmp.124 119 47 52 ];
         %tmp.124 = getv ? :Theme;
-        symbol [ BG %tmp.125 110 53 55 ];
+        symbol [ BG %tmp.125 119 53 55 ];
         %tmp.125 = getv %tmp.124 :BG;
-        symbol [ Theme %tmp.127 110 57 62 ];
+        symbol [ Theme %tmp.127 119 57 62 ];
         %tmp.127 = getv ? :Theme;
-        symbol [ TEXT_FAINT %tmp.128 110 63 73 ];
+        symbol [ TEXT_FAINT %tmp.128 119 63 73 ];
         %tmp.128 = getv %tmp.127 :TEXT_FAINT;
         %tmp.129 = lgetv %p;
-        symbol [ p %tmp.129 110 75 76 ];
+        symbol [ p %tmp.129 119 75 76 ];
         %tmp.130 = invoke %tmp.121 %tmp.122(%tmp.125, %tmp.128, %tmp.129);
         invoke %tmp.104 %tmp.105(%tmp.106, %tmp.108, %tmp.111, %tmp.117, %tmp.119, %tmp.130);
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_87_83_111_4_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_96_83_120_4_stop:
     }
 }
-[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 114; @symbol_classdef = [SummaryDelegate,114,6,21]; @symbol_extends<0> = [WatchUi,114,30,37]; @symbol_extends<1> = [BehaviorDelegate,114,38,54]; ]
+[ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 123; @symbol_classdef = [SummaryDelegate,123,6,21]; @symbol_extends<0> = [WatchUi,123,30,37]; @symbol_extends<1> = [BehaviorDelegate,123,38,54]; ]
 class SummaryDelegate extends WatchUi.BehaviorDelegate {
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 114; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 123; ]
     <init> {
     }
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 114; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 123; ]
     static
     <init> {
     }
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 116; @symbol_functiondef = [initialize,116,13,23]; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 125; @symbol_functiondef = [initialize,125,13,23]; ]
     function initialize() as Void {
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_116_26_118_4_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 117 8 ]
-        symbol [ BehaviorDelegate %tmp.2 117 8 24 ];
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_125_26_127_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 126 8 ]
+        symbol [ BehaviorDelegate %tmp.2 126 8 24 ];
         %tmp.2 = getv ? :BehaviorDelegate;
-        symbol [ initialize %tmp.3 117 25 35 ];
+        symbol [ initialize %tmp.3 126 25 35 ];
         %tmp.3 = getv function %tmp.2 :initialize;
         invoke %tmp.2 %tmp.3();
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_116_26_118_4_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_125_26_127_4_stop:
     }
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 120; @symbol_functiondef = [onSelect,120,13,21]; @symbol_return<0> = [Boolean,120,27,34]; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 129; @symbol_functiondef = [onSelect,129,13,21]; @symbol_return<0> = [Boolean,129,27,34]; ]
     function onSelect() as Boolean {
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_120_35_122_4_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 121 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_129_35_131_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 130 8 ]
         %tmp.1 = self;
-        symbol [ close %tmp.2 121 15 20 ];
+        symbol [ close %tmp.2 130 15 20 ];
         %tmp.2 = getv function %tmp.1 :close;
         %tmp.3 = invoke %tmp.1 %tmp.2();
         ret %tmp.3;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_120_35_122_4_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_129_35_131_4_stop:
     }
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 124; @symbol_functiondef = [onTap,124,13,18]; @symbol_param<0> = [evt,124,19,22]; @symbol_param<0>_type<0> = [WatchUi,124,26,33]; @symbol_param<0>_type<1> = [ClickEvent,124,34,44]; @symbol_return<0> = [Boolean,124,49,56]; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 133; @symbol_functiondef = [onTap,133,13,18]; @symbol_param<0> = [evt,133,19,22]; @symbol_param<0>_type<0> = [WatchUi,133,26,33]; @symbol_param<0>_type<1> = [ClickEvent,133,34,44]; @symbol_return<0> = [Boolean,133,49,56]; ]
     function onTap(evt as WatchUi.ClickEvent) as Boolean {
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_124_57_126_4_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 125 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_133_57_135_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 134 8 ]
         %tmp.1 = self;
-        symbol [ close %tmp.2 125 15 20 ];
+        symbol [ close %tmp.2 134 15 20 ];
         %tmp.2 = getv function %tmp.1 :close;
         %tmp.3 = invoke %tmp.1 %tmp.2();
         ret %tmp.3;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_124_57_126_4_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_133_57_135_4_stop:
     }
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 128; @symbol_functiondef = [onBack,128,13,19]; @symbol_return<0> = [Boolean,128,25,32]; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 137; @symbol_functiondef = [onBack,137,13,19]; @symbol_return<0> = [Boolean,137,25,32]; ]
     function onBack() as Boolean {
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_128_33_130_4_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 129 8 ]
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_137_33_139_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 138 8 ]
         %tmp.1 = self;
-        symbol [ close %tmp.2 129 15 20 ];
+        symbol [ close %tmp.2 138 15 20 ];
         %tmp.2 = getv function %tmp.1 :close;
         %tmp.3 = invoke %tmp.1 %tmp.2();
         ret %tmp.3;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_128_33_130_4_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_137_33_139_4_stop:
     }
-    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 132; @symbol_functiondef = [close,132,21,26]; @symbol_return<0> = [Boolean,132,32,39]; ]
+    [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 141; @symbol_functiondef = [close,141,21,26]; @symbol_return<0> = [Boolean,141,32,39]; ]
     private
     function close() as Boolean {
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_132_40_135_4_start:
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 133 8 ]
-        symbol [ WatchUi %tmp.1 133 8 15 ];
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_141_40_144_4_start:
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 142 8 ]
+        symbol [ WatchUi %tmp.1 142 8 15 ];
         %tmp.1 = getm $.Toybox.WatchUi;
-        symbol [ popView %tmp.2 133 16 23 ];
+        symbol [ popView %tmp.2 142 16 23 ];
         %tmp.2 = getv function %tmp.1 :popView;
-        symbol [ WatchUi %tmp.3 133 24 31 ];
+        symbol [ WatchUi %tmp.3 142 24 31 ];
         %tmp.3 = getm $.Toybox.WatchUi;
-        symbol [ SLIDE_DOWN %tmp.4 133 32 42 ];
+        symbol [ SLIDE_DOWN %tmp.4 142 32 42 ];
         %tmp.4 = getv %tmp.3 :SLIDE_DOWN;
         invoke %tmp.1 %tmp.2(%tmp.4);
-[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 134 8 ]
+[ "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc" 143 8 ]
         %tmp.5 = true;
         ret %tmp.5;
-_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_132_40_135_4_stop:
+_Users_shyam_bhongle_Documents_treemapper_garmin_source_views_SummaryView_mc_141_40_144_4_stop:
     }
 }
 [ @file = "/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SummaryView.mc"; @line = 1; ]

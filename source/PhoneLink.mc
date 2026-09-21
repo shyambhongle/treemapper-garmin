@@ -1,0 +1,256 @@
+import Toybox.Communications;
+import Toybox.Lang;
+import Toybox.System;
+
+//! Everything that talks to the TreeMapper phone app.
+//!
+//! The model is a mailbox, not a socket: parcels are posted in both
+//! directions and an event fires on arrival. There is no session, no
+//! handshake at the transport level, and no delivery guarantee, so this class
+//! adds the three things the field needs:
+//!
+//!   1. One transmit in flight at a time. The BLE link returns BLE_QUEUE_FULL
+//!      if you push several at once, and a dropped point is lost work.
+//!   2. An explicit acknowledgement, so a point is only removed from the
+//!      outbox once the phone has it.
+//!   3. A view of whether anyone is listening, which is not the same thing as
+//!      whether a phone is paired.
+//!
+//! PROTOCOL VERSION 1. Keep this in step with the phone app.
+//!
+//! Phone to watch
+//!   {"c":"hello"}            identify, ask for current state
+//!   {"c":"fix", "r":<n>}     send one point now, tagged with request id n
+//!   {"c":"ping"}             keepalive, answered with a state message
+//!
+//! Watch to phone
+//!   {"t":"ready", "v":1, "q":<0-4>, "gps":<0|1>, "buf":<n>, "mb":<0|1>}
+//!   {"t":"pt",    "r":<n or null>, "n":<seq>, "src":"phone"|"watch",
+//!                 "lat":<Double>, "lon":<Double>, "alt":<Float or null>,
+//!                 "q":<0-4>, "ts":<epoch s>, "spd":<Float or null>}
+//!   {"t":"err",   "r":<n or null>, "code":"no_position"|"queue_full"}
+//!
+//! Every point carries `q`, the raw Position.Quality value, and nothing is
+//! filtered on the watch. The phone decides what is good enough.
+//! Protocol version. Module scope, not a class constant: Monkey C does not
+//! expose a class const as ClassName.CONST without an instance.
+const PROTOCOL_VERSION = 1;
+
+class PhoneLink {
+
+    private var _onCommand as Method or Null = null;
+    private var _listener as TransmitListener or Null = null;
+
+    private var _busy as Boolean = false;
+    private var _lastSendOk as Boolean = true;
+    private var _appSeenMs as Number = 0;       // last inbound message, ever
+    private var _onSent as Method or Null = null;
+
+    function initialize() {
+    }
+
+    //! onCommand is invoked with the parsed inbound Dictionary.
+    //! onSent is invoked with a Boolean, true when the last transmit landed.
+    function start(onCommand as Method, onSent as Method) as Void {
+        _onCommand = onCommand;
+        _onSent = onSent;
+        _listener = new TransmitListener(self.weak());
+        Communications.registerForPhoneAppMessages(method(:onPhoneMessage));
+    }
+
+    function stop() as Void {
+        Communications.registerForPhoneAppMessages(null);
+        _onCommand = null;
+        _onSent = null;
+        _listener = null;
+        _busy = false;
+    }
+
+    // ---- inbound ----------------------------------------------------------
+
+    function onPhoneMessage(msg as Communications.PhoneAppMessage) as Void {
+        _appSeenMs = System.getTimer();
+
+        // The phone SDK carries a List<Object>, so a Dictionary sent from
+        // Android or iOS can arrive either bare or wrapped in an Array,
+        // depending on SDK version. Accept both rather than silently ignoring
+        // half of them, which looks exactly like a dead Bluetooth link.
+        var payload = unwrap(msg.data);
+        if (payload == null) {
+            return;
+        }
+
+        var cb = _onCommand;
+        if (cb != null) {
+            // Keep this cheap. The watchdog kills a callback that runs long,
+            // and this one fires on the radio's schedule, not ours.
+            cb.invoke(payload);
+        }
+    }
+
+    //! Find the payload dictionary in whatever the phone sent.
+    private function unwrap(data) as Dictionary or Null {
+        if (data instanceof Dictionary) {
+            return data;
+        }
+        if (data instanceof Array) {
+            for (var i = 0; i < data.size(); i++) {
+                var item = data[i];
+                if (item instanceof Dictionary) {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
+
+    // ---- outbound ---------------------------------------------------------
+
+    //! True when a transmit is already in flight. The caller should wait
+    //! rather than stacking sends.
+    function isBusy() as Boolean {
+        return _busy;
+    }
+
+    //! Post one parcel. Returns false when the link is busy or unavailable,
+    //! in which case the caller keeps the point in the outbox and retries.
+    function send(payload as Dictionary) as Boolean {
+        if (_busy) { return false; }
+
+        // The watch never speaks first. Transmitting before the companion app
+        // has made contact is a blind send: on the tethered transport it raises
+        // a modal "no data connection" error in the simulator, once per
+        // attempt, and on any transport it cannot succeed anyway. Hold the
+        // payload instead; it goes out the moment the phone says something.
+        if (!hasHeardFromPhone()) {
+            return false;
+        }
+
+        if (!isPhoneConnected()) {
+            _lastSendOk = false;
+            return false;
+        }
+
+        return sendRaw(stripNulls(payload));
+    }
+
+    //! Transmit a payload of any type, skipping the Dictionary-only handling.
+    //!
+    //! Only the probe ladder in Probe.mc needs this: transmit accepts a String,
+    //! a Number and an Array as well as a Dictionary, and knowing which of
+    //! those the tethered transport survives is the whole point of the ladder.
+    //! Everything else goes through send().
+    function sendRaw(payload) as Boolean {
+        if (_busy) { return false; }
+        if (!hasHeardFromPhone()) { return false; }
+        if (!isPhoneConnected()) {
+            _lastSendOk = false;
+            return false;
+        }
+
+        var listener = _listener;
+        if (listener == null) { return false; }
+
+        _busy = true;
+        System.println("[tm] transmit BEGIN");
+        Communications.transmit(payload, null, listener);
+        System.println("[tm] transmit returned");
+        return true;
+    }
+
+    //! Copy a payload without its null values.
+    //!
+    //! A null inside a Dictionary has to survive serialisation into a Java Map
+    //! on the other side of the link, and that path is a prime suspect for the
+    //! simulator crash seen on the tethered connection. An absent key and a
+    //! null value mean the same thing to the phone, so drop them.
+    private function stripNulls(payload as Dictionary) as Dictionary {
+        var clean = {};
+        var keys = payload.keys();
+        for (var i = 0; i < keys.size(); i++) {
+            var k = keys[i];
+            var v = payload[k];
+            if (v != null) {
+                clean[k] = v;
+            }
+        }
+        return clean;
+    }
+
+    //! Called back by the transmit listener.
+    function onTransmitResult(ok as Boolean) as Void {
+        // The Android SDK's ADB transport is reported to fire twice for one
+        // send, SUCCESS then FAILURE_UNKNOWN. Without this guard the spurious
+        // second callback would mark a delivered point as failed and leave the
+        // link showing a backlog that is not there.
+        if (!_busy) { return; }
+
+        System.println("[tm] transmit result ok=" + (ok ? "1" : "0"));
+        _busy = false;
+        _lastSendOk = ok;
+
+        var cb = _onSent;
+        if (cb != null) {
+            cb.invoke(ok);
+        }
+    }
+
+    // ---- link state -------------------------------------------------------
+
+    //! Whether a phone is paired and in range. This is the Garmin Connect
+    //! link, which is the only signal the watch gets. It does not prove that
+    //! TreeMapper itself is open, which is why appLikelyListening() exists.
+    function isPhoneConnected() as Boolean {
+        var settings = System.getDeviceSettings();
+        if (settings has :phoneConnected) {
+            return settings.phoneConnected;
+        }
+        return true;   // very old products: assume yes and let transmit fail
+    }
+
+    //! Heuristic: the phone app has spoken to us recently. Used to distinguish
+    //! "no phone" from "phone there, app closed", which are different problems
+    //! with different fixes for the user.
+    //! Has the companion app ever sent us anything in this session?
+    function hasHeardFromPhone() as Boolean {
+        return _appSeenMs != 0;
+    }
+
+    function appLikelyListening() as Boolean {
+        if (_appSeenMs == 0) { return false; }
+        return (System.getTimer() - _appSeenMs) < 120000;   // two minutes
+    }
+
+    function lastSendOk() as Boolean {
+        return _lastSendOk;
+    }
+}
+
+//! Transmit result callback.
+//!
+//! Holds a WeakReference back to the link. A strong reference would form a
+//! cycle, and Monkey C frees by reference counting, so a cycle is a permanent
+//! leak rather than something the collector cleans up later.
+class TransmitListener extends Communications.ConnectionListener {
+
+    private var _link as WeakReference;
+
+    function initialize(link as WeakReference) {
+        ConnectionListener.initialize();
+        _link = link;
+    }
+
+    function onComplete() as Void {
+        if (_link.stillAlive()) {
+            var link = _link.get() as PhoneLink;
+            link.onTransmitResult(true);
+        }
+    }
+
+    function onError() as Void {
+        if (_link.stillAlive()) {
+            var link = _link.get() as PhoneLink;
+            link.onTransmitResult(false);
+        }
+    }
+}

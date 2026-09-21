@@ -240,7 +240,7 @@ def capture(size, q=4, points=47, ready=True, warning=None):
     if warning is not None:
         s.pill(int(s.W * 0.70), warning[0], warning[1])
     s.hairline(int(s.W * 0.835) - int(s.r * 0.12), int(s.W * 0.30), HAIRLINE)
-    s.text(int(s.W * 0.835), "START to send" if ready else "Waiting for fix",
+    s.text(int(s.W * 0.835), "START to send" if ready else "Waiting for first fix",
            0.042, GREEN_LIGHT if ready else TEXT_FAINT)
     return s
 
@@ -253,7 +253,7 @@ def sending(size, q=4):
     s.spinner(int(s.r * 0.34), int(s.r * 0.055), GREEN_LIGHT, 140)
     s.cy = s.W // 2
     s.text(int(s.W * 0.62), "SENDING", 0.044, TEXT, tracking=0.008)
-    s.text(int(s.W * 0.71), "to TreeMapper", 0.033, TEXT_FAINT)
+    s.text(int(s.W * 0.71), "requested by phone", 0.033, TEXT_FAINT)
     return s
 
 
@@ -310,7 +310,7 @@ def main():
         ("5-sent.png", sent(size, ok=True, tree=48)),
         ("6-held.png", sent(size, ok=False)),
         ("7-waiting.png", capture(size, q=2, points=47, ready=False,
-                                  warning=("Phone lost, holding 3", Q_USABLE))),
+                                  warning=("No phone, holding 3", Q_USABLE))),
         ("8-summary.png", summary(size)),
     ]
 

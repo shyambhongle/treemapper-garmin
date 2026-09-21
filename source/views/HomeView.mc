@@ -4,14 +4,25 @@ import Toybox.System;
 import Toybox.Timer;
 import Toybox.WatchUi;
 
-//! Landing screen. A breathing tree mark, the wordmark, and one instruction.
-//! The whole point of this screen is that there is exactly one thing to do.
+//! Opening screen.
+//!
+//! This is a short splash, not a decision. The receiver and the phone link
+//! already started in AppBase.onStart, so there is nothing here to wait for and
+//! nothing to confirm. It holds for a beat to say which app just opened, then
+//! moves to acquisition on its own. START skips it.
+//!
+//! That matters for the phone flow: when TreeMapper calls openApplication(),
+//! this app must get to a useful state without anyone touching the watch.
 class HomeView extends WatchUi.View {
+
+    const AUTO_ADVANCE_MS = 1500;
 
     private var _layout as Layout or Null;
     private var _timer as Timer.Timer or Null;
-    private var _entered as Anim.Timeline;
     private var _mark as WatchUi.BitmapResource or Null;
+    private var _entered as Anim.Timeline;
+    private var _shownAtMs as Number = 0;
+    private var _moved as Boolean = false;
 
     function initialize() {
         View.initialize();
@@ -26,6 +37,8 @@ class HomeView extends WatchUi.View {
     }
 
     function onShow() as Void {
+        _moved = false;
+        _shownAtMs = System.getTimer();
         _entered.start();
         _timer = new Timer.Timer();
         _timer.start(method(:onFrame), 60, true);
@@ -39,7 +52,30 @@ class HomeView extends WatchUi.View {
     }
 
     function onFrame() as Void {
+        var session = $.gSession;
+        if (session != null) {
+            session.tick();
+
+            // If the phone asks for a point during the splash, skip straight
+            // through so the request is served and shown.
+            if (session.isRemoteActive()) {
+                advance();
+                return;
+            }
+        }
+
+        if ((System.getTimer() - _shownAtMs) >= AUTO_ADVANCE_MS) {
+            advance();
+            return;
+        }
         WatchUi.requestUpdate();
+    }
+
+    function advance() as Void {
+        if (_moved) { return; }
+        _moved = true;
+        WatchUi.switchToView(new AcquiringView(), new AcquiringDelegate(),
+                             WatchUi.SLIDE_IMMEDIATE);
     }
 
     function onUpdate(dc as Graphics.Dc) as Void {
@@ -54,8 +90,7 @@ class HomeView extends WatchUi.View {
         var now = System.getTimer();
 
         // A halo that breathes slowly behind the mark, so the screen is not a
-        // flat black field. The mark is a bitmap and cannot be scaled at draw
-        // time on older devices, so the motion lives in the ring instead.
+        // flat black field.
         var haloR = (L.r * 0.48 * (0.96 + 0.04 * Anim.breathe(now, 4200))).toNumber();
         dc.setPenWidth(2);
         dc.setColor(Theme.blend(Theme.BG, Theme.GREEN, 0.60 * intro),
@@ -67,21 +102,17 @@ class HomeView extends WatchUi.View {
             UiKit.bitmapCentred(dc, L.cx, (L.h * 0.355).toNumber(), mark);
         }
 
-        // Wordmark
         UiKit.caption(dc, L.cx, (L.h * 0.63).toNumber(), "TREEMAPPER",
                       L.fontTitle, Theme.blend(Theme.BG, Theme.TEXT, intro));
         UiKit.caption(dc, L.cx, (L.h * 0.72).toNumber(), "GPS companion",
                       L.fontLabel, Theme.blend(Theme.BG, Theme.TEXT_FAINT, intro));
 
-        // One instruction, and it pulses just enough to be noticed.
-        var hintAlpha = 0.55 + (0.45 * Anim.breathe(now, 2400));
-        var hint = L.isTouch ? "Tap to begin" : "START to begin";
-        UiKit.caption(dc, L.cx, L.bottomHintY, hint, L.fontBody,
-                      Theme.fade(Theme.GREEN_LIGHT, hintAlpha * intro));
+        UiKit.caption(dc, L.cx, L.bottomHintY, "starting receiver", L.fontLabel,
+                      Theme.blend(Theme.BG, Theme.GREEN_LIGHT, intro * 0.85));
     }
 }
 
-//! Home input. One action in, one action out.
+//! Home input. The only thing to do here is skip the wait.
 class HomeDelegate extends WatchUi.BehaviorDelegate {
 
     function initialize() {
@@ -89,20 +120,12 @@ class HomeDelegate extends WatchUi.BehaviorDelegate {
     }
 
     function onSelect() as Boolean {
-        beginSession();
+        WatchUi.switchToView(new AcquiringView(), new AcquiringDelegate(),
+                             WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
 
     function onTap(evt as WatchUi.ClickEvent) as Boolean {
-        beginSession();
-        return true;
-    }
-
-    private function beginSession() as Void {
-        var session = $.gSession;
-        if (session != null) {
-            session.startSession();
-        }
-        WatchUi.pushView(new AcquiringView(), new AcquiringDelegate(), WatchUi.SLIDE_UP);
+        return onSelect();
     }
 }
