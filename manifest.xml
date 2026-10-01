@@ -32,6 +32,7 @@
         minApiLevel="3.3.6">
 
         <iq:products>
+            <!-- Watches. Round or square, roughly 1:1, 208 to 454 px. -->
             <iq:product id="fenix7"/>
             <iq:product id="fenix7x"/>
             <iq:product id="fenix843mm"/>
@@ -42,6 +43,25 @@
             <iq:product id="venu3"/>
             <iq:product id="vivoactive5"/>
             <iq:product id="instinct2x"/>
+
+            <!--
+              Handhelds. Tall rectangles, 1:1.67, with a keypad and a
+              touchscreen. These two are the only handhelds that qualify:
+              they run Connect IQ 5.x, they carry the multi band GNSS
+              configuration API, and their firmware has
+              Communications.transmit and registerForPhoneAppMessages.
+
+              GPSMAP 67/67i, Montana 7, Oregon 7xx and Rino 7xx are NOT
+              here. Their firmware has no phone app messaging at all, so
+              PhoneLink cannot work on them. The compiler does not catch
+              this, it fails at runtime, so do not add them back.
+
+              GPSMAP 66 and 86 do carry messaging but cap at API 3.1.9 and
+              3.0.8, below the 3.3.6 floor the multi band configuration
+              needs.
+            -->
+            <iq:product id="gpsmaph1"/>
+            <iq:product id="etrextouch"/>
         </iq:products>
 
         <iq:permissions>

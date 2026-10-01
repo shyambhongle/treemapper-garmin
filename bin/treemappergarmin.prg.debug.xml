@@ -2,7 +2,7 @@
 <debugInfo>
     <manifest filename="/Users/shyam.bhongle/Documents/treemapper-garmin/manifest.xml"/>
     <pcToLineNum>
-        <entry filename="/Users/shyam.bhongle/Documents/treemapper-garmin/bin/gen/006-B3943-00/source/Rez.mcgen" id="1" lineNum="7" parent="globals/Rez" pc="268435460" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/shyam.bhongle/Documents/treemapper-garmin/bin/gen/006-B4552-00/source/Rez.mcgen" id="1" lineNum="7" parent="globals/Rez" pc="268435460" symbol="&lt;init&gt;"/>
         <entry filename="/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/SentView.mc" id="2" lineNum="140" parent="globals/SentDelegate" pc="268435480" symbol="&lt;init&gt;"/>
         <entry filename="/Users/shyam.bhongle/Documents/treemapper-garmin/source/views/CaptureView.mc" id="3" lineNum="32" parent="globals/CaptureView" pc="268435492" symbol="&lt;init&gt;"/>
         <entry filename="/Users/shyam.bhongle/Documents/treemapper-garmin/source/TreeMapperApp.mc" id="4" lineNum="15" parent="globals/TreeMapperApp" pc="268435504" symbol="&lt;init&gt;"/>
@@ -1845,7 +1845,7 @@
         <entry endPc="268453317" name="elapsed" stackId="1" startPc="268453242"/>
         <entry arg="true" endPc="268453348" name="durationMs" stackId="1" startPc="268453329"/>
     </localVars>
-    <deviceInfo deviceVersion="3d0fb192a2cf01699aefd0f384af3f527e5885bd" partNumber="006-B3943-00"/>
+    <deviceInfo deviceVersion="3d0fb192a2cf01699aefd0f384af3f527e5885bd" partNumber="006-B4552-00"/>
     <annotations>
         <annotationEntry annotation="initialized" class="Drawables" module="globals/Rez" symbol="LauncherIcon"/>
         <annotationEntry annotation="initialized" class="Strings" module="globals/Rez" symbol="MenuEnd"/>
