@@ -4,11 +4,16 @@ import Toybox.System;
 import Toybox.Timer;
 import Toybox.WatchUi;
 
-//! Satellite acquisition.
+//! Satellite acquisition. The start of the process, and where every tree
+//! begins.
 //!
 //! This screen exists because a cold multi band fix genuinely takes tens of
 //! seconds under canopy, and the person needs to see the difference between
 //! slow and broken. The elapsed counter is there for exactly that.
+//!
+//! It is re-entered after every send, but the receiver is never switched off
+//! between trees, so from the second tree onward it is normally a flash: the
+//! fix is already converged and the screen passes straight through to capture.
 //!
 //! It advances as soon as the receiver reports a real 3D-capable fix, or after
 //! a long wait with any position at all, so nobody is trapped here.
@@ -27,6 +32,11 @@ class AcquiringView extends WatchUi.View {
     private var _lockedAtMs as Number or Null;
     private var _lockAnim as Anim.Timeline;
 
+    //! Time on this screen, not receiver uptime. From the second tree onward
+    //! the receiver has been warm for many minutes, and showing that as the
+    //! acquisition wait would be nonsense.
+    private var _shownAtMs as Number = 0;
+
     function initialize() {
         View.initialize();
         _lockedAtMs = null;
@@ -40,6 +50,7 @@ class AcquiringView extends WatchUi.View {
     function onShow() as Void {
         _lockedAtMs = null;
         _lockAnim.reset();
+        _shownAtMs = System.getTimer();
         _timer = new Timer.Timer();
         _timer.start(method(:onFrame), 50, true);
     }
@@ -57,7 +68,7 @@ class AcquiringView extends WatchUi.View {
 
         session.tick();
 
-        // The phone may ask for a point before the person has even looked at
+        // The phone may ask for a fix before the person has even looked at
         // the watch. Get out of the way and let the capture screen show it.
         if (session.isRemoteActive()) {
             toCapture();
@@ -129,8 +140,8 @@ class AcquiringView extends WatchUi.View {
                       L.fontBody, Theme.quality(session.quality));
 
         // Elapsed, so slow is distinguishable from broken.
-        UiKit.caption(dc, L.cx, L.bottomHintY,
-                      session.gps().warmupSeconds().format("%d") + "s",
+        var waited = (System.getTimer() - _shownAtMs) / 1000;
+        UiKit.caption(dc, L.cx, L.bottomHintY, waited.format("%d") + "s",
                       L.fontLabel, Theme.TEXT_FAINT);
     }
 
@@ -159,8 +170,8 @@ class AcquiringDelegate extends WatchUi.BehaviorDelegate {
         BehaviorDelegate.initialize();
     }
 
-    //! Skip ahead. The capture screen refuses only when there is no position
-    //! at all, so an impatient user cannot break anything here.
+    //! Skip ahead. The capture screen refuses to send only when there is no
+    //! position at all, so an impatient user cannot break anything here.
     function onSelect() as Boolean {
         var capture = new CaptureView();
         WatchUi.switchToView(capture, new CaptureDelegate(capture),
@@ -168,6 +179,8 @@ class AcquiringDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
+    //! This is the first screen of the flow, so back leaves the app. Nothing
+    //! is in hand here, so there is nothing to lose by doing so.
     function onBack() as Boolean {
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;

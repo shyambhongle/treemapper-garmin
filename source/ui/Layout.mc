@@ -23,6 +23,7 @@ class Layout {
 
     public var topLabelY as Number;
     public var bottomHintY as Number;
+    public var secondHintY as Number;     // the quieter line under the hint
     public var statusY as Number;
 
     public var fontHero as Graphics.FontType;
@@ -52,9 +53,13 @@ class Layout {
         ringRadius = r - trackInset - (ringWidth / 2);
 
         // Vertical rhythm as fractions of height, so it scales.
+        // Two hint lines now sit below the rule, so the pill moves up and the
+        // primary hint comes in off the glass edge. Anything below about 0.87
+        // is clipped by the bezel on a round screen.
         topLabelY    = (h * 0.20).toNumber();
-        statusY      = (h * 0.70).toNumber();
-        bottomHintY  = (h * 0.83).toNumber();
+        statusY      = (h * 0.63).toNumber();
+        bottomHintY  = (h * 0.78).toNumber();
+        secondHintY  = (h * 0.855).toNumber();
 
         fontHero  = pickHero();
         fontTitle = Graphics.FONT_MEDIUM;

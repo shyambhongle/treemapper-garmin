@@ -11,8 +11,8 @@ import Toybox.System;
 //!
 //!   1. One transmit in flight at a time. The BLE link returns BLE_QUEUE_FULL
 //!      if you push several at once, and a dropped point is lost work.
-//!   2. An explicit acknowledgement, so a point is only removed from the
-//!      outbox once the phone has it.
+//!   2. An explicit acknowledgement, so the watch only lets go of a fix once
+//!      the phone actually has it.
 //!   3. A view of whether anyone is listening, which is not the same thing as
 //!      whether a phone is paired.
 //!
@@ -24,11 +24,11 @@ import Toybox.System;
 //!   {"c":"ping"}             keepalive, answered with a state message
 //!
 //! Watch to phone
-//!   {"t":"ready", "v":1, "q":<0-4>, "gps":<0|1>, "buf":<n>, "mb":<0|1>}
+//!   {"t":"ready", "v":1, "q":<0-4>, "gps":<0|1>, "buf":0, "mb":<0|1>}
 //!   {"t":"pt",    "r":<n or null>, "n":<seq>, "src":"phone"|"watch",
 //!                 "lat":<Double>, "lon":<Double>, "alt":<Float or null>,
 //!                 "q":<0-4>, "ts":<epoch s>, "spd":<Float or null>}
-//!   {"t":"err",   "r":<n or null>, "code":"no_position"|"queue_full"}
+//!   {"t":"err",   "r":<n or null>, "code":"no_position"}
 //!
 //! Every point carries `q`, the raw Position.Quality value, and nothing is
 //! filtered on the watch. The phone decides what is good enough.
@@ -42,7 +42,6 @@ class PhoneLink {
     private var _listener as TransmitListener or Null = null;
 
     private var _busy as Boolean = false;
-    private var _lastSendOk as Boolean = true;
     private var _appSeenMs as Number = 0;       // last inbound message, ever
     private var _onSent as Method or Null = null;
 
@@ -127,7 +126,6 @@ class PhoneLink {
         }
 
         if (!isPhoneConnected()) {
-            _lastSendOk = false;
             return false;
         }
 
@@ -167,7 +165,6 @@ class PhoneLink {
         if (!_busy) { return; }
 
         _busy = false;
-        _lastSendOk = ok;
 
         var cb = _onSent;
         if (cb != null) {
@@ -179,7 +176,7 @@ class PhoneLink {
 
     //! Whether a phone is paired and in range. This is the Garmin Connect
     //! link, which is the only signal the watch gets. It does not prove that
-    //! TreeMapper itself is open, which is why appLikelyListening() exists.
+    //! TreeMapper itself is open, which is why hasHeardFromPhone() exists.
     function isPhoneConnected() as Boolean {
         var settings = System.getDeviceSettings();
         if (settings has :phoneConnected) {
@@ -188,21 +185,15 @@ class PhoneLink {
         return true;   // very old products: assume yes and let transmit fail
     }
 
-    //! Heuristic: the phone app has spoken to us recently. Used to distinguish
-    //! "no phone" from "phone there, app closed", which are different problems
-    //! with different fixes for the user.
-    //! Has the companion app ever sent us anything in this session?
+    //! Has the companion app ever sent us anything since the app opened?
+    //!
+    //! This distinguishes "no phone" from "phone there, TreeMapper closed",
+    //! which are different problems with different fixes for the user. It is
+    //! deliberately "ever", not "recently": a tree can take minutes, and
+    //! warning that the app has gone quiet when it is simply idle would train
+    //! people to ignore the badge.
     function hasHeardFromPhone() as Boolean {
         return _appSeenMs != 0;
-    }
-
-    function appLikelyListening() as Boolean {
-        if (_appSeenMs == 0) { return false; }
-        return (System.getTimer() - _appSeenMs) < 120000;   // two minutes
-    }
-
-    function lastSendOk() as Boolean {
-        return _lastSendOk;
     }
 }
 

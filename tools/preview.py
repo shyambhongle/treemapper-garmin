@@ -26,18 +26,62 @@ TEXT_FAINT = (0x5A, 0x5A, 0x5A)
 Q_POOR     = (0xE0, 0x4A, 0x3C)
 Q_USABLE   = (0xE8, 0xA3, 0x3D)
 Q_GOOD     = (0x00, 0x9A, 0x5C)
+OFFLINE    = (0xE0, 0x4A, 0x3C)
 MARK_PNG   = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mark_full.png")
 
-FONT_DIR = "/usr/share/fonts/truetype/dejavu"
+# DejaVu is the reference face, because its condensed cut is the closest free
+# match to Garmin's own screen font. Where it is not installed, fall back
+# through whatever the host does have: this is a review aid, and a slightly
+# different face is far better than not rendering at all.
+FONT_DIRS = [
+    d for d in [
+        os.environ.get("TM_FONT_DIR"),
+        "/usr/share/fonts/truetype/dejavu",          # Debian, Ubuntu
+        "/usr/share/fonts/dejavu",                   # Fedora, Arch
+        "/opt/homebrew/share/fonts",                 # macOS, Homebrew
+        "/Library/Fonts",
+        "/System/Library/Fonts/Supplemental",        # macOS stock
+        "/System/Library/Fonts",
+    ] if d
+]
+
+# matplotlib bundles DejaVu, so use its copy when it is importable.
+try:
+    import matplotlib
+    FONT_DIRS.insert(1, os.path.join(
+        os.path.dirname(matplotlib.__file__), "mpl-data", "fonts", "ttf"))
+except ImportError:
+    pass
+
+
+def _find_font(names):
+    """First existing file among `names`, searched across FONT_DIRS."""
+    for name in names:
+        for d in FONT_DIRS:
+            path = os.path.join(d, name)
+            if os.path.exists(path):
+                return path
+    return None
 
 
 def font(size, bold=False, condensed=True):
-    name = "DejaVuSansCondensed" if condensed else "DejaVuSans"
-    if bold:
-        name += "-Bold"
-    path = os.path.join(FONT_DIR, name + ".ttf")
-    if not os.path.exists(path):
-        path = os.path.join(FONT_DIR, "DejaVuSans.ttf")
+    stem = "DejaVuSansCondensed" if condensed else "DejaVuSans"
+    suffix = "-Bold" if bold else ""
+    candidates = [
+        stem + suffix + ".ttf",
+        "DejaVuSans" + suffix + ".ttf",
+        "DejaVuSans.ttf",
+        "HelveticaNeue.ttc" if not bold else "HelveticaNeue.ttc",
+        "Helvetica.ttc",
+        "Arial Unicode.ttf",
+    ]
+    path = _find_font(candidates)
+    if path is None:
+        raise SystemExit(
+            "No usable font found. Searched:\n  "
+            + "\n  ".join(FONT_DIRS)
+            + "\nInstall DejaVu, or set TM_FONT_DIR to a directory holding it."
+        )
     return ImageFont.truetype(path, max(6, int(size)))
 
 
@@ -157,6 +201,14 @@ class Screen(object):
             self.d.line([bx, by, bx + (dx - bx) * t, by + (dy - by) * t],
                         fill=colour, width=pen)
 
+    def cross(self, cy, size, colour):
+        s = size * 0.40
+        pen = max(3, int(size * 0.16))
+        self.d.line([self.cx - s, cy - s, self.cx + s, cy + s],
+                    fill=colour, width=pen)
+        self.d.line([self.cx + s, cy - s, self.cx - s, cy + s],
+                    fill=colour, width=pen)
+
     def ripple(self, max_r, colour, progress):
         for i in range(3):
             t = progress - i * 0.18
@@ -215,7 +267,7 @@ def home(size):
     s.mark(hy, 0.30)
     s.text(int(s.W * 0.635), "TREEMAPPER", 0.058, TEXT, bold=True, tracking=0.006)
     s.text(int(s.W * 0.715), "GPS companion", 0.034, TEXT_FAINT)
-    s.text(int(s.W * 0.835), "START to begin", 0.042, GREEN_LIGHT)
+    s.text(int(s.W * 0.835), "starting receiver", 0.034, GREEN_LIGHT)
     return s
 
 
@@ -230,18 +282,18 @@ def acquiring(size, q=2):
     return s
 
 
-def capture(size, q=4, points=47, ready=True, warning=None):
+def capture(size, q=4, ready=True, warning=None):
+    """The fix screen: one converged position, offered to the phone."""
     s = Screen(size)
     s.ring_segments(q, qcolour(q), SURFACE)
-    s.text(int(s.W * 0.195), "GNSS " + qlabel(q), 0.033, qcolour(q), tracking=0.006)
-    s.text(int(s.W * 0.445), str(points), 0.21, TEXT, bold=True, condensed=False)
-    s.text(int(s.W * 0.590), "TREES" if points != 1 else "TREE",
-           0.033, TEXT_FAINT, tracking=0.008)
+    s.text(int(s.W * 0.20), "GNSS FIX", 0.033, TEXT_FAINT, tracking=0.006)
+    s.text(int(s.W * 0.42), qlabel(q), 0.060, qcolour(q), bold=True, tracking=0.006)
     if warning is not None:
-        s.pill(int(s.W * 0.70), warning[0], warning[1])
-    s.hairline(int(s.W * 0.835) - int(s.r * 0.12), int(s.W * 0.30), HAIRLINE)
-    s.text(int(s.W * 0.835), "START to send" if ready else "Waiting for first fix",
+        s.pill(int(s.W * 0.63), warning[0], warning[1])
+    s.hairline(int(s.W * 0.705), int(s.W * 0.30), HAIRLINE)
+    s.text(int(s.W * 0.78), "START  send" if ready else "no position yet",
            0.042, GREEN_LIGHT if ready else TEXT_FAINT)
+    s.text(int(s.W * 0.855), "BACK  restart", 0.032, TEXT_FAINT)
     return s
 
 
@@ -257,43 +309,40 @@ def sending(size, q=4):
     return s
 
 
-def sent(size, ok=True, tree=48, countdown=0.62):
+def sent(size, countdown=0.62):
+    """Only ever shown on success, then it returns to acquiring."""
     s = Screen(size)
-    accent = GREEN_LIGHT if ok else Q_USABLE
-    s.ring_progress(fade(accent, 0.55), countdown,
-                    width=s.ring_w // 2 + 1)
-    s.cy = int(s.W * 0.38)
-    s.ripple(int(s.r * 0.32), accent, 0.55)
+    s.ring_progress(fade(GREEN_LIGHT, 0.55), countdown, width=s.ring_w // 2 + 1)
+    s.cy = int(s.W * 0.40)
+    s.ripple(int(s.r * 0.32), GREEN_LIGHT, 0.55)
     s.cy = s.W // 2
-    s.check(int(s.W * 0.38), s.r * 0.30, accent, 1.0)
-    s.text(int(s.W * 0.575), "SENT" if ok else "HELD ON WATCH",
-           0.044, TEXT, bold=True, tracking=0.008)
-    s.text(int(s.W * 0.655), ("tree %d" % tree) if ok else "phone not in range",
-           0.033, TEXT_FAINT if ok else Q_USABLE)
-    s.hairline(int(s.W * 0.715), int(s.W * 0.30), HAIRLINE)
-    s.text(int(s.W * 0.785), "START  next tree", 0.042, GREEN_LIGHT)
-    s.text(int(s.W * 0.875), "BACK  finish", 0.032, TEXT_FAINT)
+    s.check(int(s.W * 0.40), s.r * 0.30, GREEN_LIGHT, 1.0)
+    s.text(int(s.W * 0.62), "SENT", 0.044, TEXT, bold=True, tracking=0.008)
+    s.text(int(s.W * 0.70), "TreeMapper has it", 0.033, TEXT_FAINT)
+    s.text(int(s.W * 0.83), "next tree", 0.032, GREEN_LIGHT)
     return s
 
 
-def summary(size, points=63, good_pct=78):
+def failed(size, q=4):
+    """The fix is still in hand. Try the same one again, or start over."""
     s = Screen(size)
-    s.ring_track(SURFACE)
-    s.ring_progress(GREEN, 1.0)
-    s.text(int(s.W * 0.195), "SESSION COMPLETE", 0.031, TEXT_FAINT, tracking=0.006)
-    s.text(int(s.W * 0.415), str(points), 0.21, TEXT, bold=True, condensed=False)
-    s.text(int(s.W * 0.560), "TREES MAPPED", 0.031, TEXT_FAINT, tracking=0.008)
+    s.ring_segments(q, qcolour(q), SURFACE)
+    s.cross(int(s.W * 0.355), s.r * 0.30, OFFLINE)
+    s.text(int(s.W * 0.545), "NOT SENT", 0.044, TEXT, bold=True, tracking=0.008)
+    s.text(int(s.W * 0.625), "phone not in range", 0.033, OFFLINE)
+    s.hairline(int(s.W * 0.705), int(s.W * 0.30), HAIRLINE)
+    s.text(int(s.W * 0.78), "START  try again", 0.042, GREEN_LIGHT)
+    s.text(int(s.W * 0.855), "BACK  restart", 0.032, TEXT_FAINT)
+    return s
 
-    bw = int(s.W * 0.40)
-    bh = max(3, int(s.W * 0.013))
-    x = s.cx - bw // 2
-    y = int(s.W * 0.655)
-    s.d.rounded_rectangle([x, y, x + bw, y + bh], radius=bh // 2, fill=Q_USABLE)
-    s.d.rounded_rectangle([x, y, x + int(bw * good_pct / 100.0), y + bh],
-                          radius=bh // 2, fill=Q_GOOD)
-    s.text(y + int(s.W * 0.050), "%d%% good fix" % good_pct, 0.031, TEXT_FAINT)
-    s.text(int(s.W * 0.755), "18:42 elapsed", 0.031, TEXT_DIM)
-    s.text(int(s.W * 0.855), "START to close", 0.040, GREEN_LIGHT)
+
+def rejected(size, q=0):
+    """The receiver has no position at all. The only thing the watch refuses."""
+    s = Screen(size)
+    s.ring_segments(q, qcolour(q), SURFACE)
+    s.cross(int(s.W * 0.43), s.r * 0.30, Q_USABLE)
+    s.text(int(s.W * 0.66), "NOT SENT", 0.044, TEXT, bold=True, tracking=0.008)
+    s.text(int(s.W * 0.755), "no position yet", 0.033, Q_USABLE)
     return s
 
 
@@ -305,13 +354,13 @@ def main():
     shots = [
         ("1-home.png", home(size)),
         ("2-acquiring.png", acquiring(size, q=2)),
-        ("3-capture.png", capture(size, q=4, points=47)),
+        ("3-capture.png", capture(size, q=4)),
         ("4-sending.png", sending(size)),
-        ("5-sent.png", sent(size, ok=True, tree=48)),
-        ("6-held.png", sent(size, ok=False)),
-        ("7-waiting.png", capture(size, q=2, points=47, ready=False,
-                                  warning=("No phone, holding 3", Q_USABLE))),
-        ("8-summary.png", summary(size)),
+        ("5-sent.png", sent(size)),
+        ("6-failed.png", failed(size)),
+        ("7-waiting.png", capture(size, q=2, ready=False,
+                                  warning=("Open TreeMapper on phone", Q_USABLE))),
+        ("8-rejected.png", rejected(size)),
     ]
 
     frames = []

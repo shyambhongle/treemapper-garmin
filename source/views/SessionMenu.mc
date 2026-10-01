@@ -1,14 +1,18 @@
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-//! The in session menu, built with the native Menu2 controls rather than a
+//! The settings menu, built with the native Menu2 controls rather than a
 //! custom view. Native controls inherit the device's own scrolling, fonts and
 //! Enhanced Readability behaviour for free, and they are what a Garmin user
 //! already knows how to operate.
+//!
+//! There is no "end session" item because there is no session to end. The
+//! watch holds nothing between trees, so leaving the app is just BACK from the
+//! acquiring screen.
 module SessionMenu {
     function build() as WatchUi.Menu2 {
         var session = $.gSession;
-        var menu = new WatchUi.Menu2({ :title => "Session" });
+        var menu = new WatchUi.Menu2({ :title => "Settings" });
 
         menu.addItem(new WatchUi.MenuItem(
             "Warn below",
@@ -16,7 +20,6 @@ module SessionMenu {
             :quality,
             {}));
 
-        menu.addItem(new WatchUi.MenuItem("End session", null, :end, {}));
         menu.addItem(new WatchUi.MenuItem("About", null, :about, {}));
 
         return menu;
@@ -41,10 +44,6 @@ class SessionMenuDelegate extends WatchUi.Menu2InputDelegate {
                 session.minQuality = (session.minQuality >= 4) ? 3 : 4;
                 item.setSubLabel(session.minQualityLabel());
             }
-        } else if (id == :end) {
-            WatchUi.popView(WatchUi.SLIDE_RIGHT);
-            WatchUi.switchToView(new SummaryView(), new SummaryDelegate(),
-                                 WatchUi.SLIDE_DOWN);
         } else if (id == :about) {
             WatchUi.pushView(new AboutView(), new AboutDelegate(),
                              WatchUi.SLIDE_LEFT);

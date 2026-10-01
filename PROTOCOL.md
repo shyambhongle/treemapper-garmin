@@ -106,7 +106,7 @@ and say so rather than showing an empty device list.
 | `q` | Current fix quality, 0 to 4. See the table below. |
 | `gps` | 1 when the receiver is running. |
 | `mb` | 1 when this device gave a multi-band (L1 + L5) solution. |
-| `buf` | Points held on the watch, not yet delivered. |
+| `buf` | Always `0`. Kept for wire compatibility; the watch holds nothing. |
 
 **`pt`** — a point.
 
@@ -118,7 +118,7 @@ and say so rather than showing an empty device list.
 
 | Field | Type | Meaning |
 |---|---|---|
-| `n` | Number | Sequence number within the session, from 1. |
+| `n` | Number | Sequence number, from 1, counting from when the app opened. Not stable across restarts. |
 | `r` | Number or null | The request id this answers, or null when the watch button started it. |
 | `src` | String | `"phone"` or `"watch"`. |
 | `lat`, `lon` | **Double** | Degrees. See the precision warning below. |
@@ -136,7 +136,9 @@ and say so rather than showing an empty device list.
 | Code | Meaning |
 |---|---|
 | `no_position` | The receiver has never produced a position. Not a quality judgement. |
-| `queue_full` | The watch outbox is full, roughly 500 points. Nothing was recorded. |
+
+`queue_full` was retired when the outbox was removed. A phone built against an
+earlier draft can keep handling it; the watch will never send it.
 
 ---
 
@@ -240,17 +242,28 @@ rewrite this:
 
 ## Delivery
 
-A point is held in a durable outbox (`Application.Storage`) until the phone
-acknowledges it at the transport level. The watch sends one parcel at a time,
-because the BLE link returns `BLE_QUEUE_FULL` when several are pushed at once.
+**The watch stores nothing.** There is no outbox and no session record. One fix
+exists at a time, in memory, from the moment the user asks to send it until the
+phone acknowledges it at the transport level. The watch then forgets it.
 
-If the link drops mid-session, points accumulate on the watch (capacity about
-500) and flush automatically when it returns. The watch screen shows the backlog
-and the summary screen warns if anything is still undelivered.
+The watch sends one parcel at a time, because the BLE link returns
+`BLE_QUEUE_FULL` when several are pushed at once.
 
-Consequence for the phone: **duplicates are possible** if an acknowledgement is
-lost after the phone already stored the point. Deduplicate on `n` within a
-session.
+If a send fails, the fix stays in hand and the watch says `NOT SENT` on screen.
+The **user** decides what happens next: press again to retry the same fix, or
+restart and take a new one. There is no automatic retry on a timer, precisely
+so a fix the user has given up on cannot arrive later on its own.
+
+What this means for the phone:
+
+- **Nothing accumulates while you are out of range.** A fix taken with the
+  phone unreachable is not kept. The person has to be in range to record a
+  tree, and the watch tells them so.
+- **Duplicates are still possible**, if an acknowledgement is lost after the
+  phone already stored the point and the user then retries. Deduplicate on `n`,
+  which counts from 1 each time the watch app opens.
+- **`n` is not a durable identifier.** It resets whenever the app restarts, so
+  pair it with your own arrival timestamp if you need a stable key.
 
 ---
 
