@@ -62,9 +62,11 @@ About thirty minutes, indoors except for the last two steps.
 | 3 | **Hello** | `ready` arrives; watch line shows quality and **multi-band** | Nothing arrives: the watch app is not running. Open it on the wrist and retry |
 | 4 | **Open watch app** | app launches on the wrist | See the note below, this is a real open question |
 | 5 | **Request GPS point** | a point, round trip under ~1 s | Watch outdoors yet? Indoors there may be no fix at all |
-| 6 | Press START **on the watch** | point arrives unprompted, `from watch` | |
-| 7 | Walk 30 m away, press START twice | watch shows a backlog, nothing lost | |
-| 8 | Walk back | backlog flushes automatically | |
+| 6 | Press START **on the watch** | point arrives unprompted, `from watch`; watch returns to acquiring | |
+| 7 | Press START again | the flow runs from the top and a second point arrives | Watch should not be counting trees; there is no tally on screen |
+| 8 | Walk 30 m away, press START | watch says **NOT SENT, phone not in range**, and stays there | Nothing is buffered: this is expected, not a bug |
+| 9 | Walk back, press START | the **same** fix goes through and the watch says SENT | The coordinate must match the one taken at step 8, not a fresh one |
+| 10 | Press START, then BACK at **NOT SENT** | the fix is discarded and the watch returns to acquiring | |
 
 ### Two things to record while you are there
 

@@ -7,6 +7,36 @@
 
 ---
 
+> ### Amendment, 1 October 2026: the offline buffer was removed
+>
+> This document is kept as the original design record. One decision in it has
+> since been reversed, and the text below has **not** been rewritten to match.
+>
+> **The watch no longer stores anything.** There is no offline buffer, no
+> session record and no tree count. One fix exists at a time, in memory, from
+> the moment the user asks to send it until the phone acknowledges it. A send
+> that fails is reported on screen and the user chooses: retry the same fix, or
+> start over and take a new one. To record another tree the flow runs again
+> from acquisition.
+>
+> What this changes against the text below:
+>
+> - Section 4: "Buffer points locally when the phone is out of range, flush on
+>   reconnect" no longer applies.
+> - Section 9's offline buffer is not built.
+> - The `buffer_full` / `queue_full` error is retired.
+> - The watch UI mock in section 9 showing a session count is superseded.
+>
+> The working contract is **`PROTOCOL.md`**, which is current. Where the two
+> disagree, PROTOCOL.md wins.
+>
+> **The trade accepted:** a fix taken out of Bluetooth range is not kept. The
+> person has to be in range to record a tree, and the watch says so plainly.
+> In exchange the watch holds no state that can go stale, be half-delivered, or
+> be lost silently, and the phone remains the single owner of the record.
+
+---
+
 ## 1. Problem
 
 TreeMapper (Android and iOS) geotags trees, records measurements, and uploads to the ForestCloud server. On some Android devices the GPS fix is not accurate enough for the plots we map, especially under canopy where multipath and signal blockage are worst.
@@ -76,7 +106,8 @@ The Connect IQ Mobile SDK routes all watch traffic through the **Garmin Connect 
 - Reject any fix below `QUALITY_USABLE`
 - Show live fix quality so the user knows when it is safe to capture
 - Send accepted points to the phone
-- Buffer points locally when the phone is out of range, flush on reconnect
+- ~~Buffer points locally when the phone is out of range, flush on reconnect~~
+  (removed, see the amendment at the top)
 - Nothing else. No species, no measurements, no server calls.
 
 ### Phone app (TreeMapper)

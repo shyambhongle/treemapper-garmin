@@ -16,8 +16,13 @@ not acknowledged.
 limited to device apps and widgets, so a background service cannot turn the
 receiver on. The watch app must be running in the foreground to produce a fresh
 fix. A cold multi-band fix takes tens of seconds, so the app starts the receiver
-on launch and keeps it warm for the session. Open it at the plot, leave it
-running, and every request answers in milliseconds.
+on launch and keeps it warm for as long as it is open. Open it at the plot,
+leave it running, and every request answers in milliseconds.
+
+**The watch stores nothing.** One fix at a time: acquire, send it to TreeMapper
+or start over. There is no outbox, no tree count, no session record. A fix lives
+in memory only until the phone acknowledges it. To record another tree, the flow
+runs again from the top.
 
 ---
 
@@ -27,15 +32,14 @@ running, and every request answers in milliseconds.
 |---|---|---|
 | 1 | **Home** | A short splash. The receiver already started in `onStart`, so this holds for 1.5 s then advances on its own. START skips it. |
 | 2 | **Acquiring** | Sweeping arc while the receiver converges, with an elapsed counter so slow is distinguishable from broken. Advances on a real fix, or after 90 seconds with any position. |
-| 3 | **Capture** | The working screen. Quality ring, one large count, START to send. |
-| 4 | **Sending** | The point is genuinely in flight, and the screen says whether the phone or the watch button asked for it. |
-| 5 | **Sent** | It reached TreeMapper. Offers the next tree or finish, and continues on its own after four seconds. |
-| 6 | **Held on watch** | The same screen when the phone was not listening. The point is recorded, not delivered, and it says so. |
-| 7 | **Waiting** | Capture screen with the fix below the floor: ring breathes, action hint goes dead, warning strip appears. |
-| 8 | **Summary** | What was collected, how long it took, how much of it was a good fix. |
+| 3 | **Capture** | The fix screen. Quality ring, the quality word, START to send, BACK to start over. |
+| 4 | **Sending** | The fix is genuinely in flight, and the screen says whether the phone or the watch button asked for it. |
+| 5 | **Sent** | It reached TreeMapper. Returns to acquiring for the next tree after two seconds. |
+| 6 | **Not sent** | The send did not reach the phone. The fix is still in hand: START tries the same one again, BACK starts over. |
+| 7 | **Waiting** | Capture screen with no position yet: ring breathes, action hint goes dead, warning strip appears. |
+| 8 | **Rejected** | The only refusal the watch makes, when the receiver has no position at all. |
 
-Plus a native `Menu2` for the quality floor and ending the session,
-and a small About page.
+Plus a native `Menu2` for the quality warning threshold, and a small About page.
 
 Static previews are in [`previews/`](previews/). Regenerate with:
 
@@ -78,9 +82,9 @@ If strict brand fidelity matters more than sunlight legibility, set
 permanent "phone connected" pill. When the link is healthy, which is almost
 always, the screen says nothing about it, because a badge that is true on every
 screen stops being read. The strip appears only when the link drops, and the
-per-point confirmation already proves delivery: a point that reached the phone
-says SENT, a point that did not says HELD ON WATCH. That distinction is the
-thing the user actually needs.
+per-fix confirmation already proves delivery: a fix that reached the phone says
+SENT, a fix that did not says NOT SENT and stays in hand. That distinction is
+the thing the user actually needs.
 
 **Sending is shown, not assumed.** Press, brief spinner, then a result. The
 watch does not claim a point was delivered before it was.
@@ -95,15 +99,14 @@ products too.
 40 ms only during an animation. On a real device with the GNSS receiver already
 running, this is the difference between a working day and an afternoon.
 
-**Back does not silently exit.** From the capture screen, back goes to the
-summary. Losing a morning of work to a stray button press would be the worst
-failure this app could have.
+**Back does not silently exit.** From the capture screen, back throws the fix
+away and returns to acquiring. One more back from there leaves the app, so the
+fix in hand is never one stray press away from being lost.
 
-**The confirmation continues on its own.** The sent screen offers the next tree
-or finish, but mapping sixty trees should not cost sixty extra decisions, so
-continuing is the default and a draining arc shows the four seconds left.
-Pressing START skips the wait, BACK finishes instead. Set `AUTO_MS = 0` in
-`SentView.mc` to require a press every time.
+**The confirmation continues on its own.** Mapping sixty trees should not cost
+sixty extra decisions, so the sent screen returns to acquiring by itself after
+two seconds, with a draining arc showing the wait. Any press skips it. The
+receiver never stopped, so the next fix is normally instant.
 
 ---
 
@@ -114,7 +117,9 @@ manifest.xml            products, permissions, entry point
 monkey.jungle           build configuration
 source/
   TreeMapperApp.mc      AppBase, entry point
-  SessionState.mc       MOCK session data. Replace this with the real thing.
+  SessionState.mc       the brain: receiver, phone link, the one fix in hand
+  GpsService.mc         Toybox.Position
+  PhoneLink.mc          Toybox.Communications
   ui/
     Theme.mc            colour tokens, blending, quality mapping
     Layout.mc           screen metrics derived from the Dc
@@ -123,9 +128,8 @@ source/
   views/
     HomeView.mc
     AcquiringView.mc
-    CaptureView.mc      the main screen
-    SentView.mc         confirmation, next tree or finish
-    SummaryView.mc
+    CaptureView.mc      the fix screen: send, or start over
+    SentView.mc         confirmation, then back to acquiring
     SessionMenu.mc      native Menu2
     AboutView.mc
 resources/
@@ -170,32 +174,35 @@ device with the exact size that product wants and the warning goes away.
 ## How the pieces fit
 
 ```
-TreeMapperApp        starts and stops the session with the app
-  SessionState       the brain: owns the three below, the only thing views touch
+TreeMapperApp        starts and stops the receiver with the app
+  SessionState       the brain: owns the two below, the only thing views touch,
+                     and holds the single fix in flight
     GpsService       Toybox.Position. Picks the best supported GNSS config,
                      keeps the receiver warm, hands out snapshots
     PhoneLink        Toybox.Communications. One parcel in flight at a time,
                      explicit acknowledgement, link state
-    PointQueue       Application.Storage. Durable outbox, about 500 points
 ```
 
-Two rules run through it:
+Three rules run through it:
 
-**A point is not sent until the phone says so.** Everything captured goes into
-the outbox first and the counters derive from what was acknowledged. A dropped
-link costs a delay, never a tree.
+**A fix is not sent until the phone says so.** The watch holds it until the
+transport acknowledges it, then lets go entirely.
+
+**Nothing is stored.** A fix that does not reach the phone is not kept. The user
+is told plainly and chooses: retry the same fix, or start over. The phone owns
+the record; the watch is a sensor. Closing the app loses whatever was in hand.
 
 **The watch never filters on quality.** Every point travels with its
 `Position.Quality` value and the phone decides what to keep. The watch refuses
-only when there is no position at all, or the outbox is full.
+only when there is no position at all.
 
 ## Not built yet
 
 - No `Background` permission and no background service. Everything happens while
   the app is open, which is forced by the Position restriction above.
 - No activity recording or FIT output.
-- Reconnect is best effort: the outbox flushes on the next tick when the link
-  returns, with no backoff.
+- No retry on a timer. A failed send waits for the user, so a fix they have
+  moved past cannot arrive later on its own.
 
 ---
 
