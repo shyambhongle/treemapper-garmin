@@ -86,9 +86,4 @@ class Layout {
         if (w >= 390) { return Rez.Drawables.MarkMedium; }
         return Rez.Drawables.MarkSmall;
     }
-
-    //! Vertical centre for a block of text of the given font.
-    function textTop(font as Graphics.FontType, centreY as Number) as Number {
-        return centreY - (Graphics.getFontHeight(font) / 2);
-    }
 }

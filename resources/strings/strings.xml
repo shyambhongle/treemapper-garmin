@@ -1,8 +1,5 @@
 <resources>
+    <!-- The only string the resource compiler needs: manifest.xml references
+         it as @Strings.AppName. The menu builds its labels in SessionMenu.mc. -->
     <string id="AppName">TreeMapper</string>
-
-    <string id="MenuTitle">Session</string>
-    <string id="MenuQuality">Quality floor</string>
-    <string id="MenuEnd">End session</string>
-    <string id="MenuAbout">About</string>
 </resources>

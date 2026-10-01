@@ -1,4 +1,3 @@
-import Toybox.Graphics;
 import Toybox.Lang;
 
 //! Colour tokens and colour maths for the whole app.
@@ -21,8 +20,6 @@ module Theme {
     // legibility, set GREEN_LIGHT = GREEN and everything still works.
     const GREEN        = 0x007A49;  // brand
     const GREEN_LIGHT  = 0x35A97A;  // same hue, lifted for small text on black
-    const GREEN_DEEP   = 0x005633;  // pressed / shadow
-    const GREEN_SOFT   = 0x00301C;  // halo, inactive track
 
     // Surface
     const BG           = 0x000000;  // true black: cheapest on both MIP and AMOLED

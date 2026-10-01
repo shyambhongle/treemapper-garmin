@@ -131,30 +131,11 @@ class PhoneLink {
             return false;
         }
 
-        return sendRaw(stripNulls(payload));
-    }
-
-    //! Transmit a payload of any type, skipping the Dictionary-only handling.
-    //!
-    //! Only the probe ladder in Probe.mc needs this: transmit accepts a String,
-    //! a Number and an Array as well as a Dictionary, and knowing which of
-    //! those the tethered transport survives is the whole point of the ladder.
-    //! Everything else goes through send().
-    function sendRaw(payload) as Boolean {
-        if (_busy) { return false; }
-        if (!hasHeardFromPhone()) { return false; }
-        if (!isPhoneConnected()) {
-            _lastSendOk = false;
-            return false;
-        }
-
         var listener = _listener;
         if (listener == null) { return false; }
 
         _busy = true;
-        System.println("[tm] transmit BEGIN");
-        Communications.transmit(payload, null, listener);
-        System.println("[tm] transmit returned");
+        Communications.transmit(stripNulls(payload), null, listener);
         return true;
     }
 
@@ -185,7 +166,6 @@ class PhoneLink {
         // link showing a backlog that is not there.
         if (!_busy) { return; }
 
-        System.println("[tm] transmit result ok=" + (ok ? "1" : "0"));
         _busy = false;
         _lastSendOk = ok;
 

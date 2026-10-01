@@ -16,31 +16,12 @@ module Anim {
         return 1.0 - (inv * inv * inv);
     }
 
-    //! Ease in out cubic. Good for things that loop.
-    function easeInOut(t as Float) as Float {
-        var k = clamp(t);
-        if (k < 0.5) {
-            return 4.0 * k * k * k;
-        }
-        var f = (2.0 * k) - 2.0;
-        return 1.0 + (f * f * f) / 2.0;
-    }
-
     //! Overshoot slightly then settle. Used for the capture confirmation.
     function easeBack(t as Float) as Float {
         var k = clamp(t);
         var s = 1.70158;
         var f = k - 1.0;
         return (f * f * ((s + 1.0) * f + s)) + 1.0;
-    }
-
-    //! A 0..1 triangle wave over the given period, in milliseconds.
-    function pulse(elapsedMs as Number, periodMs as Number) as Float {
-        var phase = (elapsedMs % periodMs).toFloat() / periodMs.toFloat();
-        if (phase < 0.5) {
-            return phase * 2.0;
-        }
-        return (1.0 - phase) * 2.0;
     }
 
     //! A smooth 0..1 breathing wave over the given period.
@@ -53,10 +34,6 @@ module Anim {
         if (t < 0.0) { return 0.0; }
         if (t > 1.0) { return 1.0; }
         return t;
-    }
-
-    function lerp(a as Float, b as Float, t as Float) as Float {
-        return a + (b - a) * clamp(t);
     }
 
     //! A one shot timeline. Construct it, call start(), read progress() each

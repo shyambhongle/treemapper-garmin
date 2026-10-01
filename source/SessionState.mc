@@ -69,9 +69,6 @@ class SessionState {
     // Retry pacing. A failed transmit must never be retried immediately.
     private var _nextPumpMs as Number = 0;
 
-    //! Next rung of the payload ladder in Probe.mc. Inert unless
-    //! PROBE_MODE is on.
-    private var _probeIndex as Number = 0;
     private var _failures as Number = 0;
 
     // Work asked for by the phone, deferred out of the receive callback.
@@ -101,7 +98,6 @@ class SessionState {
         _rejectReason = REJECT_NONE;
         _failures = 0;
         _nextPumpMs = 0;
-        _probeIndex = 0;
 
         _gps.start();
         _phone.start(method(:onPhoneCommand), method(:onTransmitResult));
@@ -193,10 +189,8 @@ class SessionState {
     //! there is nothing to send, which is the only case the watch refuses: not
     //! a quality judgement, just the absence of a position.
     function requestSend(source as String, requestId as Number or Null) as Number {
-        System.println("[tm] requestSend from " + source);
         var snapshot = _gps.snapshot();
         if (snapshot == null) {
-            System.println("[tm] no position, refused");
             _rejectReason = REJECT_NO_POSITION;
             return SEND_REJECTED;
         }
@@ -221,10 +215,7 @@ class SessionState {
         if (snapshot["alt"] != null) { point["alt"] = snapshot["alt"]; }
         if (snapshot["spd"] != null) { point["spd"] = snapshot["spd"]; }
 
-        System.println("[tm] point built, seq " + _seq.format("%d"));
-
         if (!_outbox.push(point)) {
-            System.println("[tm] outbox push FAILED");
             _seq--;
             _rejectReason = REJECT_QUEUE_FULL;
             return SEND_REJECTED;
@@ -252,9 +243,7 @@ class SessionState {
         _inFlight = true;
         _sendStartedMs = System.getTimer();
 
-        System.println("[tm] stored, pumping");
         pump();
-        System.println("[tm] pump returned");
         return SEND_PENDING;
     }
 
@@ -295,8 +284,6 @@ class SessionState {
             // The point stays in the outbox, but do not go straight back at it.
             _failures++;
             _nextPumpMs = System.getTimer() + backoffMs();
-            System.println("[tm] send failed, attempt " + _failures.format("%d")
-                           + ", waiting " + backoffMs().format("%d") + "ms");
             if (_inFlight) {
                 _inFlight = false;
                 _pendingResult = SEND_QUEUED;
@@ -330,19 +317,6 @@ class SessionState {
     //! likely cause of the simulator crash on the tethered link. At most one
     //! parcel leaves per tick.
     private function servePhoneRequests() as Void {
-        // The payload ladder takes priority over the real protocol: while it
-        // is running nothing else may put a parcel on the wire, or the rung
-        // that crashed stops being attributable.
-        if ($.PROBE_MODE and _probeIndex < $.PROBE_COUNT) {
-            if (_phone.isBusy() or !_phone.hasHeardFromPhone()) { return; }
-            System.println("[tm] PROBE " + _probeIndex.format("%d")
-                           + " -> " + $.probeName(_probeIndex));
-            if (_phone.sendRaw($.probePayload(_probeIndex))) {
-                _probeIndex++;
-            }
-            return;
-        }
-
         if (_hasPendingFix) {
             _hasPendingFix = false;
             var reqId = _pendingFixId;

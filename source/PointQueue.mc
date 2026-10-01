@@ -1,6 +1,5 @@
 import Toybox.Application;
 import Toybox.Lang;
-import Toybox.System;
 
 //! A durable outbox for points the phone has not acknowledged.
 //!
@@ -126,18 +125,5 @@ class PointQueue {
                 return;
             }
         }
-    }
-
-    //! Wipe the outbox. Called when a session ends with everything delivered,
-    //! so a later session does not inherit stale chunk indices.
-    function clear() as Void {
-        for (var i = _head; i <= _tail; i++) {
-            Application.Storage.deleteValue(key(i));
-        }
-        _head = 0;
-        _tail = 0;
-        _count = 0;
-        Application.Storage.setValue(K_HEAD, 0);
-        Application.Storage.setValue(K_TAIL, 0);
     }
 }
